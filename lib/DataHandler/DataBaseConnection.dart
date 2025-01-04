@@ -7,11 +7,11 @@ Future<void> executeQuery(String filePath) async {
 
   final connection = await Connection.open(
       Endpoint(
-        host: '10.0.2.2',
+        host: '163.5.94.58',
         port: 5432,
-        database: 'DataBaseProject',
+        database: 'mashmammad',
         username: 'postgres',
-        password: 'amir7007',
+        password: 'Erfank2004@',
       ),
       settings: const ConnectionSettings(
         sslMode: SslMode.disable,
