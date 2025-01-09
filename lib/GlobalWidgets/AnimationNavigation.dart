@@ -31,28 +31,47 @@ class AnimationNavigation {
     ));
   }
 
-static void navigateMakeFirst(
-  Widget page,
-  BuildContext context, {
-  Duration duration = const Duration(milliseconds: 300),
-  Curve curve = Curves.easeInOut,
-}) {
-  Navigator.of(context).pushAndRemoveUntil(
-    PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => page,
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        return _fadeScaleTransition(animation, child);
+  static void navigateMakeFirst(
+    Widget page,
+    BuildContext context, {
+    Duration duration = const Duration(milliseconds: 300),
+    Curve curve = Curves.easeInOut,
+  }) {
+    Navigator.of(context).pushAndRemoveUntil(
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => page,
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return _fadeScaleTransition(animation, child);
+        },
+        transitionDuration: duration,
+      ),
+      (route) {
+        return route.isFirst;
       },
-      transitionDuration: duration,
-    ),
-    (route) {
-      return route.isFirst;
-    },
-  );
-}
+    );
+  }
 
+  static void navigatePopAllReplace(
+    Widget page,
+    BuildContext context, {
+    Duration duration = const Duration(milliseconds: 300),
+    Curve curve = Curves.easeInOut,
+  }) {
+    Navigator.of(context).pushAndRemoveUntil(
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => page,
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return _fadeScaleTransition(
+              animation, child); // Assuming this is defined
+        },
+        transitionDuration: duration,
+      ),
+      (route) => false, // Removes all routes
+    );
+  }
 
-  static Widget _fadeScaleTransition(Animation<double> animation, Widget child) {
+  static Widget _fadeScaleTransition(
+      Animation<double> animation, Widget child) {
     return FadeTransition(
       opacity: animation,
       child: ScaleTransition(
