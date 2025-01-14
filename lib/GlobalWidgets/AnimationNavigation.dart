@@ -4,7 +4,7 @@ class AnimationNavigation {
   static void navigatePush(
     Widget page,
     BuildContext context, {
-    Duration duration = const Duration(milliseconds: 300),
+    Duration duration = const Duration(milliseconds: 500),
     Curve curve = Curves.easeInOut,
   }) {
     Navigator.of(context).push(PageRouteBuilder(
@@ -19,7 +19,7 @@ class AnimationNavigation {
   static void navigateReplace(
     Widget page,
     BuildContext context, {
-    Duration duration = const Duration(milliseconds: 300),
+    Duration duration = const Duration(milliseconds: 500),
     Curve curve = Curves.easeInOut,
   }) {
     Navigator.of(context).pushReplacement(PageRouteBuilder(
@@ -34,7 +34,7 @@ class AnimationNavigation {
   static void navigateMakeFirst(
     Widget page,
     BuildContext context, {
-    Duration duration = const Duration(milliseconds: 300),
+    Duration duration = const Duration(milliseconds:500),
     Curve curve = Curves.easeInOut,
   }) {
     Navigator.of(context).pushAndRemoveUntil(
@@ -54,7 +54,7 @@ class AnimationNavigation {
   static void navigatePopAllReplace(
     Widget page,
     BuildContext context, {
-    Duration duration = const Duration(milliseconds: 300),
+    Duration duration = const Duration(milliseconds: 500),
     Curve curve = Curves.easeInOut,
   }) {
     Navigator.of(context).pushAndRemoveUntil(
@@ -66,7 +66,7 @@ class AnimationNavigation {
         },
         transitionDuration: duration,
       ),
-      (route) => false, // Removes all routes
+      (route) => false, 
     );
   }
 

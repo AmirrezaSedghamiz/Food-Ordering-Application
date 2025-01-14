@@ -35,7 +35,7 @@ class _MapBuilderState extends State<MapBuilder> {
   final MapController mapController = MapController();
   final TextEditingController searchController = TextEditingController();
   bool isSearchExpanded = false;
-  List<Item> searchResults = []; // Mock search results for now
+  List<Itemm> searchResults = []; // Mock search results for now
 
   Future<void> getUserLocation() async {
     Location location = Location();
@@ -281,7 +281,7 @@ class _MapBuilderState extends State<MapBuilder> {
 
 class LocationSearch {
   int count;
-  List<Item> items;
+  List<Itemm> items;
   LocationSearch({
     required this.count,
     required this.items,
@@ -297,9 +297,9 @@ class LocationSearch {
   factory LocationSearch.fromMap(Map<String, dynamic> map) {
     return LocationSearch(
       count: map['count'] as int,
-      items: List<Item>.from(
-        (map['items']).map<Item>(
-          (x) => Item.fromMap(x),
+      items: List<Itemm>.from(
+        (map['items']).map<Itemm>(
+          (x) => Itemm.fromMap(x),
         ),
       ),
     );
@@ -311,12 +311,12 @@ class LocationSearch {
       LocationSearch.fromMap(json.decode(source));
 }
 
-class Item {
+class Itemm {
   String? title;
   String? address;
   String? neighbourhood;
   LocationSeri location;
-  Item({
+  Itemm({
     required this.title,
     required this.address,
     required this.neighbourhood,
@@ -332,8 +332,8 @@ class Item {
     };
   }
 
-  factory Item.fromMap(Map<String, dynamic> map) {
-    return Item(
+  factory Itemm.fromMap(Map<String, dynamic> map) {
+    return Itemm(
       title: map['title'],
       address: map['address'],
       neighbourhood: map['neighbourhood'],
@@ -343,8 +343,8 @@ class Item {
 
   String toJson() => json.encode(toMap());
 
-  factory Item.fromJson(String source) =>
-      Item.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory Itemm.fromJson(String source) =>
+      Itemm.fromMap(json.decode(source) as Map<String, dynamic>);
 }
 
 class LocationSeri {

@@ -11,7 +11,7 @@ Future<void> executeQuery(String filePath) async {
         port: 5432,
         database: 'mashmammad',
         username: 'postgres',
-        password: 'Erfank2004@',
+        password: 'Erfank2004@', 
       ),
       settings: const ConnectionSettings(
         sslMode: SslMode.disable,
