@@ -4,10 +4,12 @@
 import 'package:postgres/postgres.dart';
 
 class DayHour {
+  int id;
   Time startHour;
   Time endHour;
   WeekDay dayOfWeek;
   DayHour({
+    required this.id,
     required this.startHour,
     required this.endHour,
     required this.dayOfWeek,

@@ -12,7 +12,5 @@ class ItemOrder {
     required this.quantity,
   });
 
-  // Future<ItemOrder> getItemOrderWithId(int id) async {
 
-  // }
 }

@@ -1,5 +1,7 @@
 import 'package:data_base_project/GlobalWidgets/AnimationNavigation.dart';
+import 'package:data_base_project/GlobalWidgets/HttpClient.dart';
 import 'package:data_base_project/GlobalWidgets/Map.dart';
+import 'package:data_base_project/SourceDesign/Customer.dart';
 import 'package:data_base_project/gen/assets.gen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -75,24 +77,33 @@ class _SignUpPageState extends State<SignUpPage> {
                       children: [
                         Text(
                           'باید',
-                          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                              color: const Color(0xFFFB4141),
-                              fontWeight: FontWeight.w800,
-                              fontSize: 28),
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyLarge!
+                              .copyWith(
+                                  color: const Color(0xFFFB4141),
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: 28),
                         ),
                         Text(
                           'مشخصاتت',
-                          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                              color: const Color(0xFFFB4141),
-                              fontWeight: FontWeight.w800,
-                              fontSize: 28),
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyLarge!
+                              .copyWith(
+                                  color: const Color(0xFFFB4141),
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: 28),
                         ),
                         Text(
                           'رو وارد کنی',
-                          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                              color: const Color(0xFFFB4141),
-                              fontWeight: FontWeight.w800,
-                              fontSize: 28),
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyLarge!
+                              .copyWith(
+                                  color: const Color(0xFFFB4141),
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: 28),
                         ),
                       ],
                     ),
@@ -350,9 +361,11 @@ class _SignUpPageState extends State<SignUpPage> {
                               MapBuilder(
                                 username: _usernameController.text,
                                 password: _passwordController.text,
-                                confirmPassword: _confirmPasswordController.text,
+                                confirmPassword:
+                                    _confirmPasswordController.text,
                                 phoneNumber: _phoneNumberController.text,
-                              ), context);
+                              ),
+                              context);
                         },
                         icon: const Icon(
                           Icons.location_on,
@@ -384,72 +397,96 @@ class _SignUpPageState extends State<SignUpPage> {
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.04,
               ),
-              ElevatedButton(
-                  onPressed: !isLoading
-                      ? () async {
-                          bool flag = false;
-                          if (_usernameController.text.isEmpty) {
-                            flag = true;
-                            setState(() {
-                              errorTextUsername = 'نام کاربری را وارد کنید';
-                            });
-                          }
-                          if (_passwordController.text.isEmpty) {
-                            flag = true;
-                            setState(() {
-                              errorTextPassword = 'رمز مورد نظر خود را وارد کنید';
-                            });
-                          } else if (_passwordController.text.length < 8) {
-                            flag = true;
-                            setState(() {
-                              errorTextPassword =
-                                  'رمز شما باید بیشتر از 8 کارکتر باشد';
-                            });
-                          }
-                          if (_confirmPasswordController.text !=
-                              _passwordController.text) {
-                            flag = true;
-                            setState(() {
-                              errorTextConfirmPassword =
-                                  'رمز و تکرار رمز باید یکسان باشند';
-                            });
-                          }
-                          if (_phoneNumberController.text.isEmpty) {
-                            flag = true;
-                            setState(() {
-                              errorTextPhoneNumber =
-                                  'شماره تلفن خود را وارد کنید';
-                            });
-                          }
-                          if (_addressController.text.isEmpty) {
-                            flag = true;
-                            setState(() {
-                              errorTextAddress = 'آدرس خود را وارد کنید';
-                            });
-                          }
-                          if (flag) {
-                            return;
-                          }
-                          setState(() {
-                            isLoading = true;
-                          });
-                          //TODO
-                        }
-                      : () {},
-                  style: ElevatedButton.styleFrom(
+              Container(
+                width: MediaQuery.of(context).size.width * 300 / 412,
+                height: MediaQuery.of(context).size.height * 50 / 900,
+                child: ElevatedButton(
+                    onPressed: !isLoading ? () async {
+                      bool flag = false;
+                      if (_usernameController.text.isEmpty) {
+                        flag = true;
+                        setState(() {
+                          errorTextUsername = 'نام کاربری را وارد کنید';
+                        });
+                      }
+                      if (_passwordController.text.isEmpty) {
+                        flag = true;
+                        setState(() {
+                          errorTextPassword = 'رمز مورد نظر خود را وارد کنید';
+                        });
+                      } else if (_passwordController.text.length < 8) {
+                        flag = true;
+                        setState(() {
+                          errorTextPassword =
+                              'رمز شما باید بیشتر از 8 کارکتر باشد';
+                        });
+                      }
+                      if (_confirmPasswordController.text !=
+                          _passwordController.text) {
+                        flag = true;
+                        setState(() {
+                          errorTextConfirmPassword =
+                              'رمز و تکرار رمز باید یکسان باشند';
+                        });
+                      }
+                      if (_phoneNumberController.text.isEmpty) {
+                        flag = true;
+                        setState(() {
+                          errorTextPhoneNumber = 'شماره تلفن خود را وارد کنید';
+                        });
+                      }
+                      if (_addressController.text.isEmpty) {
+                        flag = true;
+                        setState(() {
+                          errorTextAddress = 'آدرس خود را وارد کنید';
+                        });
+                      }
+                      if (flag) {
+                        return;
+                      }
+                      setState(() {
+                        isLoading = true;
+                      });
+                      try {
+                        LocationSeri loc;
+
+                        loc = LocationSeri.fromMap((await HttpClient.geoCoding.get(
+                                'geocoding?address=${_addressController.text}',
+                                options: HttpClient.globalHeader))
+                            .data['location']);
+                        Customer? customer = await Customer.insertCustomer(
+                            username: _usernameController.text,
+                            password: _passwordController.text,
+                            phoneNumber: _phoneNumberController.text,
+                            addressString: _addressController.text,
+                            latLng: widget.location ?? LatLng(loc.y, loc.x));
+                        //TODO
+                      } catch (e) {
+                        print(e);
+                        setState(() {
+                          errorTextUsername = 'نام کاربری تکراری می باشد';
+                        });
+                      }
+                      setState(() {
+                        isLoading = false;
+                      });
+                    } : () {},
+                    style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFFFFC145),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20)),
-                      minimumSize: Size(
-                          MediaQuery.of(context).size.width * 300 / 412,
-                          MediaQuery.of(context).size.height * 50 / 900)),
-                  child: Text(
-                    "بزن بریم",
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium!
-                        .copyWith(color: Colors.white, fontSize: 20),
-                  )),
+                    ),
+                    child: Text(
+                      "بزن بریم",
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium!
+                          .copyWith(color: Colors.white, fontSize: 20),
+                    )),
+              ),
+              const SizedBox(
+                height: 24,
+              )
             ],
           ),
         ),

@@ -1,8 +1,13 @@
+import 'package:data_base_project/DataHandler/QueryHandler.dart';
 import 'package:data_base_project/GlobalWidgets/AnimationNavigation.dart';
 import 'package:data_base_project/MainApplication/LoginSignUp/SignUpPage.dart';
+import 'package:data_base_project/SourceDesign/Admin.dart';
+import 'package:data_base_project/SourceDesign/Customer.dart';
+import 'package:data_base_project/SourceDesign/Manager.dart';
 import 'package:data_base_project/gen/assets.gen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -24,9 +29,9 @@ class _LoginPageState extends State<LoginPage> {
       resizeToAvoidBottomInset: true,
       body: SafeArea(
           child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-            child: Column(
-                    children: [
+        physics: const BouncingScrollPhysics(),
+        child: Column(
+          children: [
             Stack(
               children: [
                 ClipPath(
@@ -90,16 +95,16 @@ class _LoginPageState extends State<LoginPage> {
                   counter: null,
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(4),
-                      borderSide:
-                          const BorderSide(color: Color(0xFFEDEDED), width: 1.6)),
+                      borderSide: const BorderSide(
+                          color: Color(0xFFEDEDED), width: 1.6)),
                   focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(4),
-                      borderSide:
-                          const BorderSide(color: Color(0xFFEDEDED), width: 1.6)),
+                      borderSide: const BorderSide(
+                          color: Color(0xFFEDEDED), width: 1.6)),
                   enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(4),
-                      borderSide:
-                          const BorderSide(color: Color(0xFFEDEDED), width: 1.6)),
+                      borderSide: const BorderSide(
+                          color: Color(0xFFEDEDED), width: 1.6)),
                 ),
               ),
             ),
@@ -151,56 +156,82 @@ class _LoginPageState extends State<LoginPage> {
                   errorText: errorText,
                   errorBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(4),
-                      borderSide:
-                          const BorderSide(color: Color(0xFFEDEDED), width: 1.6)),
+                      borderSide: const BorderSide(
+                          color: Color(0xFFEDEDED), width: 1.6)),
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(4),
-                      borderSide:
-                          const BorderSide(color: Color(0xFFEDEDED), width: 1.6)),
+                      borderSide: const BorderSide(
+                          color: Color(0xFFEDEDED), width: 1.6)),
                   focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(4),
-                      borderSide:
-                          const BorderSide(color: Color(0xFFEDEDED), width: 1.6)),
+                      borderSide: const BorderSide(
+                          color: Color(0xFFEDEDED), width: 1.6)),
                   enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(4),
-                      borderSide:
-                          const BorderSide(color: Color(0xFFEDEDED), width: 1.6)),
+                      borderSide: const BorderSide(
+                          color: Color(0xFFEDEDED), width: 1.6)),
                 ),
               ),
             ),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.05,
             ),
-            ElevatedButton(
-                onPressed: !isLoading
-                    ? () async {
-                        if (_usernameController.text.isEmpty ||
-                            _passwordController.text.isEmpty) {
+            Container(
+              width: MediaQuery.of(context).size.width * 300 / 412,
+              height: MediaQuery.of(context).size.height * 50 / 900,
+              child: ElevatedButton(
+                  onPressed: !isLoading
+                      ? () async {
+                          if (_usernameController.text.isEmpty ||
+                              _passwordController.text.isEmpty) {
+                            setState(() {
+                              errorText = 'نام کاربری و پسورد را وارد کنید';
+                            });
+                            return;
+                          }
                           setState(() {
-                            errorText = 'نام کاربری و پسورد را وارد کنید';
+                            isLoading = true;
                           });
-                          return;
+                          try {
+                            final result = await LoginQuery.login(
+                                username: _usernameController.text,
+                                password: _passwordController.text);
+                            print(result);
+                            if (result is Customer) {
+                              //TODO
+                            } else if (result is Manager) {
+                              //TODO
+                            } else if (result is Admin) {
+                              //TODO
+                            } else {
+                              setState(() {
+                                errorText = 'اطلاعات وارد شده نادرست است';
+                              });
+                            }
+                          } catch (e) {
+                            print(e);
+                          }
+                          setState(() {
+                            isLoading = false;
+                          });
                         }
-                        setState(() {
-                          isLoading = true;
-                        });
-                        //TODO
-                      }
-                    : () {},
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFFFC145),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
-                    minimumSize: Size(
-                        MediaQuery.of(context).size.width * 300 / 412,
-                        MediaQuery.of(context).size.height * 50 / 900)),
-                child: Text(
-                  "بزن بریم",
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium!
-                      .copyWith(color: Colors.white, fontSize: 20),
-                )),
+                      : () {},
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFFFC145),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20)),
+                      ),
+                  child: isLoading
+                      ? LoadingAnimationWidget.hexagonDots(
+                          color: Colors.white, size: 25)
+                      : Text(
+                          "بزن بریم",
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium!
+                              .copyWith(color: Colors.white, fontSize: 20),
+                        )),
+            ),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.015,
             ),
@@ -230,7 +261,8 @@ class _LoginPageState extends State<LoginPage> {
                           color: const Color(0xFFFFC145),
                           fontSize: 22,
                           fontWeight: FontWeight.w600,
-                          decoration: TextDecoration.underline, // Adds underline
+                          decoration:
+                              TextDecoration.underline, // Adds underline
                           decorationColor: const Color(
                               0xFFFFC145), // Match underline color with text color
                           decorationThickness: 1),
@@ -239,9 +271,9 @@ class _LoginPageState extends State<LoginPage> {
                 ],
               ),
             )
-                    ],
-                  ),
-          )),
+          ],
+        ),
+      )),
     );
   }
 }

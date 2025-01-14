@@ -146,7 +146,9 @@ class _MapBuilderState extends State<MapBuilder> {
                               },
                               style: const TextStyle(
                                   fontFamily: 'DanaFaNum', fontSize: 16),
+                              
                               decoration: InputDecoration(
+                                fillColor: Colors.white,
                                 hintText: "جستجو",
                                 prefixIcon: const Icon(Icons.search),
                                 focusColor: Colors.white,
@@ -240,7 +242,7 @@ class _MapBuilderState extends State<MapBuilder> {
                                 username: widget.username,
                                 password: widget.password,
                                 confirmPassword: widget.confirmPassword,
-                                phoneNumber: widget.confirmPassword,
+                                phoneNumber: widget.phoneNumber,
                                 location: selectedLocation ??
                                     (userLocation != null
                                         ? LatLng(userLocation!.latitude!,

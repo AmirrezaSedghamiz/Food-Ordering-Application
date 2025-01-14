@@ -12,7 +12,7 @@ class Restaurant {
   String address;
   LatLng point;
   int deliveryRadius;
-  File image;
+  Uint8List image;
   Manager manager;
   List<Category> categories;
   Restaurant({
