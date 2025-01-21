@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:postgres/postgres.dart';
 
@@ -18,7 +17,7 @@ Future<void> executeQuery(String filePath) async {
       ));
 
   try {
-    await connection;
+    connection;
     print('Connected to the database.');
 
     // Example query

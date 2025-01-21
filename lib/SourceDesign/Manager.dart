@@ -1,8 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
-import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:data_base_project/DataHandler/QueryHandler.dart';
 import 'package:postgres/postgres.dart';
 
 class Manager {
@@ -10,8 +10,8 @@ class Manager {
   String username;
   String phoneNumber;
   Uint8List? image;
-  
-    factory Manager.fromMap(Map<String, dynamic> map) {
+
+  factory Manager.fromMap(Map<String, dynamic> map) {
     return Manager(
       managerid: map['managerid'] as int,
       username: map['username'] as String,
@@ -20,7 +20,6 @@ class Manager {
     );
   }
 
-
   Manager({
     required this.managerid,
     required this.username,
@@ -28,7 +27,7 @@ class Manager {
     this.image,
   });
 
-  static Future<void> insertManager({
+  static Future<Manager?> insertManager({
     required String username,
     required String password,
     required String phoneNumber,
@@ -46,7 +45,7 @@ class Manager {
         ));
 
     try {
-      await connection;
+      connection;
       print('Connected to the database.');
 
       var result = await connection.execute(
@@ -56,7 +55,10 @@ class Manager {
             'password': password,
             'phoneNumber': phoneNumber
           });
+      Manager manager =
+          await LoginQuery.login(username: username, password: password);
       print("SUCCESSFUL!");
+      return manager;
     } catch (e) {
       print('Error: $e');
     } finally {
@@ -64,5 +66,4 @@ class Manager {
       print('Connection closed.');
     }
   }
-
 }

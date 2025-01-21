@@ -1,9 +1,12 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:data_base_project/GlobalWidgets/AnimationNavigation.dart';
 import 'package:data_base_project/GlobalWidgets/HttpClient.dart';
 import 'package:data_base_project/MainApplication/LoginSignUp/SignUpPage.dart';
+import 'package:data_base_project/MainApplication/Manager/Restaurant/NewRestaurant.dart';
+import 'package:data_base_project/SourceDesign/Manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -14,15 +17,42 @@ import 'package:location/location.dart';
 class MapBuilder extends StatefulWidget {
   const MapBuilder(
       {super.key,
-      this.username,
-      this.password,
-      this.confirmPassword,
-      this.phoneNumber});
+      required this.username,
+      required this.password,
+      required this.confirmPassword,
+      required this.phoneNumber,
+      required this.isInRestaurantPage,
+      required this.image,
+      required this.manager,
+      required this.restaurantName,
+      required this.restaurantDeliveryRadius,
+      required this.restaurantDeliveryFee,
+      required this.restaurantPic,
+      required this.restaurantIdConfirm,
+      required this.startHour,
+      required this.endHour,
+      required this.day,
+      required this.restaurantHours});
 
+  final bool isInRestaurantPage;
+
+  final String? restaurantName;
+  final String? restaurantDeliveryRadius;
+  final String? restaurantDeliveryFee;
+  final List<TextEditingController>? restaurantHours;
+
+  final File? restaurantPic;
+  final File? image;
+  final Manager? manager;
   final String? username;
   final String? password;
   final String? confirmPassword;
   final String? phoneNumber;
+  final int? restaurantIdConfirm;
+  final List<String?> startHour;
+  final List<String?> endHour;
+  final List<String?> day;
+
 
   @override
   State<MapBuilder> createState() => _MapBuilderState();
@@ -146,7 +176,6 @@ class _MapBuilderState extends State<MapBuilder> {
                               },
                               style: const TextStyle(
                                   fontFamily: 'DanaFaNum', fontSize: 16),
-                              
                               decoration: InputDecoration(
                                 fillColor: Colors.white,
                                 hintText: "جستجو",
@@ -237,20 +266,46 @@ class _MapBuilderState extends State<MapBuilder> {
                           final response = await HttpClient.reverseGeoCoding.get(
                               'reverse?lat=${selectedLocation != null ? selectedLocation!.latitude : userLocation?.latitude!}&lng=${selectedLocation != null ? selectedLocation!.longitude : userLocation?.longitude!}',
                               options: HttpClient.globalHeader);
-                          AnimationNavigation.navigateMakeFirst(
-                              SignUpPage(
-                                username: widget.username,
-                                password: widget.password,
-                                confirmPassword: widget.confirmPassword,
-                                phoneNumber: widget.phoneNumber,
-                                location: selectedLocation ??
-                                    (userLocation != null
-                                        ? LatLng(userLocation!.latitude!,
-                                            userLocation!.longitude!)
-                                        : null),
-                                address: response.data["formatted_address"],
-                              ),
-                              context);
+                          if (!(widget.isInRestaurantPage)) {
+                            AnimationNavigation.navigateMakeFirst(
+                                SignUpPage(
+                                  username: widget.username,
+                                  password: widget.password,
+                                  confirmPassword: widget.confirmPassword,
+                                  phoneNumber: widget.phoneNumber,
+                                  location: selectedLocation ??
+                                      (userLocation != null
+                                          ? LatLng(userLocation!.latitude!,
+                                              userLocation!.longitude!)
+                                          : null),
+                                  address: response.data["formatted_address"],
+                                ),
+                                context);
+                          } else {
+                            Navigator.pop(context);
+                            AnimationNavigation.navigateReplace(
+                                NewRestaurant(
+                                  startHour: widget.startHour,
+                                  endHour: widget.endHour,
+                                  day: widget.day,
+                                  restaurantIdConfirm: widget.restaurantIdConfirm,
+                                  restaurantPic: widget.restaurantPic,
+                                    phoneNumber: widget.phoneNumber,
+                                    image: widget.image,
+                                    location: selectedLocation ??
+                                        (userLocation != null
+                                            ? LatLng(userLocation!.latitude!,
+                                                userLocation!.longitude!)
+                                            : null),
+                                    manager: widget.manager!,
+                                    name: widget.restaurantName,
+                                    address: response.data["formatted_address"],
+                                    maxDistance:
+                                        widget.restaurantDeliveryRadius,
+                                    deliveryFee: widget.restaurantDeliveryFee,
+                                    timeControllers: widget.restaurantHours),
+                                context);
+                          }
                         },
                   child: isLoading
                       ? Center(

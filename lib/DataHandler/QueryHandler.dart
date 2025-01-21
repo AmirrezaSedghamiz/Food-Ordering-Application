@@ -21,7 +21,7 @@ class LoginQuery {
         ));
 
     try {
-      await connection;
+      connection;
       var result = await connection.execute(
           Sql.named('SELECT login_user(@input_username, @input_password)'),
           parameters: {

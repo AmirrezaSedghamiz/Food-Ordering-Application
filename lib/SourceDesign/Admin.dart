@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:postgres/postgres.dart';
@@ -45,7 +44,7 @@ class Admin {
         ));
 
     try {
-      await connection;
+      connection;
       print('Connected to the database.');
 
       var result = await connection.execute(

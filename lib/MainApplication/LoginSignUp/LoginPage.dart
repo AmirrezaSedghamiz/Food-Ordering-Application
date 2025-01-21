@@ -1,9 +1,12 @@
 import 'package:data_base_project/DataHandler/QueryHandler.dart';
 import 'package:data_base_project/GlobalWidgets/AnimationNavigation.dart';
+import 'package:data_base_project/MainApplication/Customer/Dashboard/Dashboard.dart';
 import 'package:data_base_project/MainApplication/LoginSignUp/SignUpPage.dart';
+import 'package:data_base_project/MainApplication/Manager/Dashboard/ManagerDashboard.dart';
 import 'package:data_base_project/SourceDesign/Admin.dart';
 import 'package:data_base_project/SourceDesign/Customer.dart';
 import 'package:data_base_project/SourceDesign/Manager.dart';
+import 'package:data_base_project/SourceDesign/Restaurant.dart';
 import 'package:data_base_project/gen/assets.gen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +29,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFF201F22),
       resizeToAvoidBottomInset: true,
       body: SafeArea(
           child: SingleChildScrollView(
@@ -76,11 +80,13 @@ class _LoginPageState extends State<LoginPage> {
                 obscureText: false,
                 textAlign: TextAlign.start,
                 style: const TextStyle(
-                  fontSize: 13,
-                  fontFamily: "DanaFaNum",
-                  fontWeight: FontWeight.w900,
-                ),
+                    fontSize: 13,
+                    fontFamily: "DanaFaNum",
+                    fontWeight: FontWeight.w900,
+                    color: Colors.white),
                 decoration: InputDecoration(
+                  filled: true,
+                  fillColor: const Color(0xff484848),
                   prefixIcon: const Icon(
                     Icons.person,
                     color: Colors.grey,
@@ -121,11 +127,13 @@ class _LoginPageState extends State<LoginPage> {
                 obscureText: _isObscure,
                 textAlign: TextAlign.start,
                 style: const TextStyle(
-                  fontSize: 13,
-                  fontFamily: "DanaFaNum",
-                  fontWeight: FontWeight.w900,
-                ),
+                    fontSize: 13,
+                    fontFamily: "DanaFaNum",
+                    fontWeight: FontWeight.w900,
+                    color: Colors.white),
                 decoration: InputDecoration(
+                  filled: true,
+                  fillColor: const Color(0xff484848),
                   prefixIcon: const Icon(
                     Icons.lock,
                     color: Colors.grey,
@@ -176,7 +184,7 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.05,
             ),
-            Container(
+            SizedBox(
               width: MediaQuery.of(context).size.width * 300 / 412,
               height: MediaQuery.of(context).size.height * 50 / 900,
               child: ElevatedButton(
@@ -198,9 +206,14 @@ class _LoginPageState extends State<LoginPage> {
                                 password: _passwordController.text);
                             print(result);
                             if (result is Customer) {
-                              //TODO
+                              AnimationNavigation.navigatePopAllReplace(
+                                  Dashboard(customer: result), context);
                             } else if (result is Manager) {
-                              //TODO
+                              Restaurant? restaurant = await
+                                  Restaurant.getRestaurantByManagerId(
+                                      managerId: result.managerid);
+                              AnimationNavigation.navigatePopAllReplace(
+                                  ManagerDashboard(manager: result , restaurantId: restaurant?.restaurantId,), context);
                             } else if (result is Admin) {
                               //TODO
                             } else {
@@ -217,10 +230,10 @@ class _LoginPageState extends State<LoginPage> {
                         }
                       : () {},
                   style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFFFC145),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20)),
-                      ),
+                    backgroundColor: const Color(0xFFF56949),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                  ),
                   child: isLoading
                       ? LoadingAnimationWidget.hexagonDots(
                           color: Colors.white, size: 25)
@@ -246,7 +259,7 @@ class _LoginPageState extends State<LoginPage> {
                     style: Theme.of(context)
                         .textTheme
                         .bodyMedium!
-                        .copyWith(color: const Color(0xFFFFC145), fontSize: 18),
+                        .copyWith(color: const Color(0xFFF56949), fontSize: 18),
                   ),
                   TextButton(
                     onPressed: isLoading
@@ -258,13 +271,13 @@ class _LoginPageState extends State<LoginPage> {
                     child: Text(
                       "یکی بساز",
                       style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          color: const Color(0xFFFFC145),
+                          color: const Color(0xFFF56949),
                           fontSize: 22,
                           fontWeight: FontWeight.w600,
                           decoration:
                               TextDecoration.underline, // Adds underline
                           decorationColor: const Color(
-                              0xFFFFC145), // Match underline color with text color
+                              0xFFF56949), // Match underline color with text color
                           decorationThickness: 1),
                     ),
                   ),

@@ -39,7 +39,7 @@ class Address {
         ));
 
     try {
-      await connection;
+      connection;
       var result = await connection.execute(
           Sql.named(
               'CALL insert_address(@addressstring, @longtitude, @latitude, @isselected, @customerid)'),
@@ -71,7 +71,7 @@ class Address {
         ));
 
     try {
-      await connection;
+      connection;
       var result = await connection.execute(
           Sql.named('SELECT get_user_addresses(@username)'),
           parameters: {'username': username});

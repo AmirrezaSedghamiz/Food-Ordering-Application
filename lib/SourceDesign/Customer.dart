@@ -1,6 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:data_base_project/DataHandler/QueryHandler.dart';
@@ -53,7 +52,7 @@ class Customer {
         ));
 
     try {
-      await connection;
+      connection;
       var result = await connection.execute(
           Sql.named(
               'CALL insert_customer(@p_username, @p_password, @p_phoneNumber)'),
@@ -85,5 +84,6 @@ class Customer {
     } finally {
       await connection.close();
     }
+    return null;
   }
 }
