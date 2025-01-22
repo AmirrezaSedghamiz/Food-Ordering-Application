@@ -177,6 +177,7 @@ class _MapBuilderState extends State<MapBuilder> {
                               style: const TextStyle(
                                   fontFamily: 'DanaFaNum', fontSize: 16),
                               decoration: InputDecoration(
+                                filled: true,
                                 fillColor: Colors.white,
                                 hintText: "جستجو",
                                 prefixIcon: const Icon(Icons.search),

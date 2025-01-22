@@ -364,36 +364,7 @@ class _NewRestaurantState extends State<NewRestaurant> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.03,
-                  ),
-                  Center(
-                    child: Stack(
-                      alignment: AlignmentDirectional.bottomEnd,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(1),
-                            border: Border.all(color: Colors.white, width: 1.6),
-                          ),
-                          width: 144,
-                          height: 144,
-                          child: ClipRRect(
-                            child: _image == null
-                                ? const SizedBox()
-                                : Image.file(
-                                    File(_image!.path),
-                                    fit: BoxFit.cover,
-                                  ),
-                          ),
-                        ),
-                        Positioned(
-                            right: 10,
-                            bottom: 10,
-                            child: _showSnackBar(context)),
-                      ],
-                    ),
-                  ),
+                  
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.03,
                   ),
@@ -584,6 +555,42 @@ class _NewRestaurantState extends State<NewRestaurant> {
                                 color: Color(0xFFEDEDED), width: 1.6)),
                       ),
                     ),
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.03,
+                  ),
+                  Text(
+                    'عکس پروفایل رستوران',
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                        color: const Color(0xFFFEC37D),
+                        fontWeight: FontWeight.w400,
+                        fontSize: 18),
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.03,
+                  ),
+                  Stack(
+                    alignment: AlignmentDirectional.bottomEnd,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(1),
+                          border: Border.all(color: Colors.white, width: 1.6),
+                        ),
+                        width: 144,
+                        height: 144,
+                        child: ClipRRect(
+                          child: _image == null
+                              ? const SizedBox()
+                              : Image.file(
+                                  File(_image!.path),
+                                  fit: BoxFit.cover,
+                                ),
+                        ),
+                      ),
+                      Positioned(
+                          right: 10, bottom: 10, child: _showSnackBar(context)),
+                    ],
                   ),
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.035,

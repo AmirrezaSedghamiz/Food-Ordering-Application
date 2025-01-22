@@ -144,7 +144,7 @@ class _LoginPageState extends State<LoginPage> {
                           _isObscure = !_isObscure;
                         });
                       },
-                      icon: _isObscure
+                      icon: !_isObscure
                           ? const Icon(
                               CupertinoIcons.eye,
                               color: Colors.grey,

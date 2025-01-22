@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 class Item {
-  int itemId;
   String name;
   String recipe;
   double cost;
@@ -11,7 +10,6 @@ class Item {
   Uint8List? image;
   
   Item({
-    required this.itemId,
     required this.name,
     required this.recipe,
     required this.cost,
@@ -22,7 +20,6 @@ class Item {
 
   factory Item.fromMap(Map<String, dynamic> map) {
     return Item(
-      itemId: map['itemid'] as int,
       name: map['name'] as String,
       recipe: map['recipe'] as String,
       cost: map['cost'] as double,
@@ -33,4 +30,25 @@ class Item {
 
 
   factory Item.fromJson(String source) => Item.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  @override
+  bool operator ==(covariant Item other) {
+    if (identical(this, other)) return true;
+  
+    return 
+      other.name == name &&
+      other.recipe == recipe &&
+      other.cost == cost &&
+      other.isDeleted == isDeleted &&
+      other.image == image;
+  }
+
+  @override
+  int get hashCode {
+    return name.hashCode ^
+      recipe.hashCode ^
+      cost.hashCode ^
+      isDeleted.hashCode ^
+      image.hashCode;
+  }
 }
