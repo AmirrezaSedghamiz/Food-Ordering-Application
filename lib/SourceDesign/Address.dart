@@ -5,19 +5,21 @@ import 'package:postgres/postgres.dart';
 class Address {
   int addressId;
   String address;
+  bool isSelected;
   LatLng point;
   Address({
     required this.addressId,
+    required this.isSelected,
     required this.address,
     required this.point,
   });
 
-    factory Address.fromMap(Map<String, dynamic> map) {
+  factory Address.fromMap(Map<String, dynamic> map) {
     return Address(
-      addressId: map['addressid'],
-      address: map['addressstring'],
-      point: LatLng(map['latitude'], map['longtitude']) 
-    );
+        isSelected: map['isselected'],
+        addressId: map['addressid'],
+        address: map['addressstring'],
+        point: LatLng(map['latitude'], map['longtitude']));
   }
 
   static Future<void> insertAddress({
@@ -57,7 +59,8 @@ class Address {
     }
   }
 
-  static Future<dynamic> getUserAddress({required String username}) async {
+  static Future<List<Address>?> getUserAddress(
+      {required String username}) async {
     final connection = await Connection.open(
         Endpoint(
           host: '163.5.94.58',
@@ -73,9 +76,21 @@ class Address {
     try {
       connection;
       var result = await connection.execute(
-          Sql.named('SELECT get_user_addresses(@username)'),
-          parameters: {'username': username});
-      return result[0][0];
+          Sql.named('SELECT get_user_addresses(@username, @page, @page_size)'),
+          parameters: {
+            'username': username,
+            'page': 1,
+            'page_size': 30,
+          });
+      dynamic finalData = result[0][0];
+      if (finalData == null) {
+        return [];
+      }
+      List<Address> addresses = [];
+      for (var i in finalData['addresses']) {
+        addresses.add(Address.fromMap(i));
+      }
+      return addresses;
     } catch (e) {
       print('Error: $e');
     } finally {

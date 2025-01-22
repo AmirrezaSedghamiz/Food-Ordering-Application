@@ -180,6 +180,7 @@ class ManagerDashboard extends StatelessWidget {
                                   [];
                           AnimationNavigation.navigatePush(
                               RestaurantItems(
+                                  restaurantId: restaurantId!,
                                   image: imageFile,
                                   categories: categories,
                                   manager: manager),

@@ -63,20 +63,21 @@ class Customer {
           });
       Customer customer =
           await LoginQuery.login(username: username, password: password);
-      Address.insertAddress(
+      final data = await Address.insertAddress(
           addressString: addressString,
           latLng: latLng,
           isSelected: true,
           customerID: customer.customerId);
-      var address = await Address.getUserAddress(username: username);
-      List<Address> addresses = [];
-      for (var i in address) {
-        addresses.add(Address.fromMap(i));
-        if (i['isselected']) {
-          customer.selectedAddress = Address.fromMap(i);
+      var addresses = (await Address.getUserAddress(username: username)) ?? [];
+      for (var i in addresses) {
+        addresses.add(i);
+        if (i.isSelected) {
+          customer.selectedAddress = i;
         }
       }
+      print('after for');
       customer.addresses = addresses;
+      print('after this');
       await connection.close();
       return customer;
     } catch (e) {

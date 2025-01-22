@@ -81,72 +81,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   child: Column(
                     children: [
                       SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.14,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            width:
-                                MediaQuery.of(context).size.width * 200 / 412,
-                            height:
-                                MediaQuery.of(context).size.height * 50 / 900,
-                            child: ElevatedButton(
-                                onPressed: () {
-                                  setState(() {
-                                    isManager = false;
-                                  });
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: !isManager
-                                      ? Colors.orange
-                                      : const Color(0xFFFFC145),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20)),
-                                ),
-                                child: Text(
-                                  "میخوام غذا بگیرم",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium!
-                                      .copyWith(
-                                          color: Colors.white, fontSize: 14),
-                                )),
-                          ),
-                          const SizedBox(
-                            width: 24,
-                          ),
-                          SizedBox(
-                            width:
-                                MediaQuery.of(context).size.width * 150 / 412,
-                            height:
-                                MediaQuery.of(context).size.height * 50 / 900,
-                            child: ElevatedButton(
-                                onPressed: () {
-                                  setState(() {
-                                    isManager = true;
-                                  });
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: isManager
-                                      ? Colors.orange
-                                      : const Color(0xFFFFC145),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20)),
-                                ),
-                                child: Text(
-                                  "رستوران دارم",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium!
-                                      .copyWith(
-                                          color: Colors.white, fontSize: 14),
-                                )),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.04,
+                        height: MediaQuery.of(context).size.height * (isManager? 0.2 : 0.14),
                       ),
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 300 / 412,
@@ -181,15 +116,15 @@ class _SignUpPageState extends State<SignUpPage> {
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(4),
                                 borderSide: const BorderSide(
-                                    color: Color(0xFFEDEDED), width: 1.6)),
+                                    color: Color(0xFFEDEDED), width: 1)),
                             focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(4),
                                 borderSide: const BorderSide(
-                                    color: Color(0xFFEDEDED), width: 1.6)),
+                                    color: Color(0xFFEDEDED), width: 1)),
                             enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(4),
                                 borderSide: const BorderSide(
-                                    color: Color(0xFFEDEDED), width: 1.6)),
+                                    color: Color(0xFFEDEDED), width: 1)),
                           ),
                         ),
                       ),
@@ -244,15 +179,15 @@ class _SignUpPageState extends State<SignUpPage> {
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(4),
                                 borderSide: const BorderSide(
-                                    color: Color(0xFFEDEDED), width: 1.6)),
+                                    color: Color(0xFFEDEDED), width: 1)),
                             focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(4),
                                 borderSide: const BorderSide(
-                                    color: Color(0xFFEDEDED), width: 1.6)),
+                                    color: Color(0xFFEDEDED), width: 1)),
                             enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(4),
                                 borderSide: const BorderSide(
-                                    color: Color(0xFFEDEDED), width: 1.6)),
+                                    color: Color(0xFFEDEDED), width: 1)),
                           ),
                         ),
                       ),
@@ -307,15 +242,15 @@ class _SignUpPageState extends State<SignUpPage> {
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(4),
                                 borderSide: const BorderSide(
-                                    color: Color(0xFFEDEDED), width: 1.6)),
+                                    color: Color(0xFFEDEDED), width: 1)),
                             focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(4),
                                 borderSide: const BorderSide(
-                                    color: Color(0xFFEDEDED), width: 1.6)),
+                                    color: Color(0xFFEDEDED), width: 1)),
                             enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(4),
                                 borderSide: const BorderSide(
-                                    color: Color(0xFFEDEDED), width: 1.6)),
+                                    color: Color(0xFFEDEDED), width: 1)),
                           ),
                         ),
                       ),
@@ -359,15 +294,15 @@ class _SignUpPageState extends State<SignUpPage> {
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(4),
                                 borderSide: const BorderSide(
-                                    color: Color(0xFFEDEDED), width: 1.6)),
+                                    color: Color(0xFFEDEDED), width: 1)),
                             focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(4),
                                 borderSide: const BorderSide(
-                                    color: Color(0xFFEDEDED), width: 1.6)),
+                                    color: Color(0xFFEDEDED), width: 1)),
                             enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(4),
                                 borderSide: const BorderSide(
-                                    color: Color(0xFFEDEDED), width: 1.6)),
+                                    color: Color(0xFFEDEDED), width: 1)),
                           ),
                         ),
                       ),
@@ -389,6 +324,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                 fontFamily: "DanaFaNum",
                                 fontWeight: FontWeight.w900,
                                 color: Colors.white),
+                            readOnly: true,
                             decoration: InputDecoration(
                               filled: true,
                               fillColor: const Color(0xff484848),
@@ -437,15 +373,15 @@ class _SignUpPageState extends State<SignUpPage> {
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(4),
                                   borderSide: const BorderSide(
-                                      color: Color(0xFFEDEDED), width: 1.6)),
+                                      color: Color(0xFFEDEDED), width: 1)),
                               focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(4),
                                   borderSide: const BorderSide(
-                                      color: Color(0xFFEDEDED), width: 1.6)),
+                                      color: Color(0xFFEDEDED), width: 1)),
                               enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(4),
                                   borderSide: const BorderSide(
-                                      color: Color(0xFFEDEDED), width: 1.6)),
+                                      color: Color(0xFFEDEDED), width: 1)),
                             ),
                           ),
                         ),
@@ -592,7 +528,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                   }
                                 : () {},
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.orange,
+                              backgroundColor: const Color(0xFFFFC145),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(20)),
                             ),
@@ -609,13 +545,40 @@ class _SignUpPageState extends State<SignUpPage> {
                                   )),
                       ),
                       const SizedBox(
+                        height: 12,
+                      ),
+                      TextButton(
+                        onPressed: isLoading
+                            ? () {}
+                            : () {
+                                setState(() {
+                                  isManager = !isManager;
+                                });
+                              },
+                        child: Text(
+                          !isManager ? "ثبت نام به عنوان مدیر رستوران" :"ثبت نام به عنوان مشتری",
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium!
+                              .copyWith(
+                                  color: const Color(0xFFFFC145),
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.w500,
+                                  decoration: TextDecoration
+                                      .underline, // Adds underline
+                                  decorationColor: const Color(
+                                      0xFFFFC145), // Match underline color with text color
+                                  decorationThickness: 1),
+                        ),
+                      ),
+                      const SizedBox(
                         height: 24,
-                      )
+                      ),
                     ],
                   ),
                 ),
                 Positioned(
-                    bottom: 50,
+                    bottom: 5,
                     left: 20,
                     child: Assets.images.signUpImage
                         .image(width: 200, height: 100))

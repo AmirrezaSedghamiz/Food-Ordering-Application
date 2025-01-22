@@ -101,16 +101,16 @@ class _LoginPageState extends State<LoginPage> {
                   counter: null,
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(4),
-                      borderSide: const BorderSide(
-                          color: Color(0xFFEDEDED), width: 1.6)),
+                      borderSide:
+                          const BorderSide(color: Color(0xFFEDEDED), width: 1)),
                   focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(4),
-                      borderSide: const BorderSide(
-                          color: Color(0xFFEDEDED), width: 1.6)),
+                      borderSide:
+                          const BorderSide(color: Color(0xFFEDEDED), width: 1)),
                   enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(4),
-                      borderSide: const BorderSide(
-                          color: Color(0xFFEDEDED), width: 1.6)),
+                      borderSide:
+                          const BorderSide(color: Color(0xFFEDEDED), width: 1)),
                 ),
               ),
             ),
@@ -164,20 +164,20 @@ class _LoginPageState extends State<LoginPage> {
                   errorText: errorText,
                   errorBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(4),
-                      borderSide: const BorderSide(
-                          color: Color(0xFFEDEDED), width: 1.6)),
+                      borderSide:
+                          const BorderSide(color: Color(0xFFEDEDED), width: 1)),
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(4),
-                      borderSide: const BorderSide(
-                          color: Color(0xFFEDEDED), width: 1.6)),
+                      borderSide:
+                          const BorderSide(color: Color(0xFFEDEDED), width: 1)),
                   focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(4),
-                      borderSide: const BorderSide(
-                          color: Color(0xFFEDEDED), width: 1.6)),
+                      borderSide:
+                          const BorderSide(color: Color(0xFFEDEDED), width: 1)),
                   enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(4),
-                      borderSide: const BorderSide(
-                          color: Color(0xFFEDEDED), width: 1.6)),
+                      borderSide:
+                          const BorderSide(color: Color(0xFFEDEDED), width: 1)),
                 ),
               ),
             ),
@@ -209,11 +209,15 @@ class _LoginPageState extends State<LoginPage> {
                               AnimationNavigation.navigatePopAllReplace(
                                   Dashboard(customer: result), context);
                             } else if (result is Manager) {
-                              Restaurant? restaurant = await
-                                  Restaurant.getRestaurantByManagerId(
+                              Restaurant? restaurant =
+                                  await Restaurant.getRestaurantByManagerId(
                                       managerId: result.managerid);
                               AnimationNavigation.navigatePopAllReplace(
-                                  ManagerDashboard(manager: result , restaurantId: restaurant?.restaurantId,), context);
+                                  ManagerDashboard(
+                                    manager: result,
+                                    restaurantId: restaurant?.restaurantId,
+                                  ),
+                                  context);
                             } else if (result is Admin) {
                               //TODO
                             } else {

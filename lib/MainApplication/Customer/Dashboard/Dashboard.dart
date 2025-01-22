@@ -95,19 +95,19 @@ class _DashboardState extends State<Dashboard> {
                                 errorBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(12),
                                     borderSide: const BorderSide(
-                                        color: Color(0xFFEDEDED), width: 1.6)),
+                                        color: Color(0xFFEDEDED), width: 1)),
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(12),
                                     borderSide: const BorderSide(
-                                        color: Color(0xFFEDEDED), width: 1.6)),
+                                        color: Color(0xFFEDEDED), width: 1)),
                                 focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(12),
                                     borderSide: const BorderSide(
-                                        color: Color(0xFFEDEDED), width: 1.6)),
+                                        color: Color(0xFFEDEDED), width: 1)),
                                 enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(12),
                                     borderSide: const BorderSide(
-                                        color: Color(0xFFEDEDED), width: 1.6)),
+                                        color: Color(0xFFEDEDED), width: 1)),
                               ),
                             ),
                           ),

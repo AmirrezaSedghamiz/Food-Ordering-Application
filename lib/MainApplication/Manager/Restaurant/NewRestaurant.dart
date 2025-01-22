@@ -364,7 +364,6 @@ class _NewRestaurantState extends State<NewRestaurant> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.03,
                   ),
@@ -406,15 +405,15 @@ class _NewRestaurantState extends State<NewRestaurant> {
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(4),
                             borderSide: const BorderSide(
-                                color: Color(0xFFEDEDED), width: 1.6)),
+                                color: Color(0xFFEDEDED), width: 1)),
                         focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(4),
                             borderSide: const BorderSide(
-                                color: Color(0xFFEDEDED), width: 1.6)),
+                                color: Color(0xFFEDEDED), width: 1)),
                         enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(4),
                             borderSide: const BorderSide(
-                                color: Color(0xFFEDEDED), width: 1.6)),
+                                color: Color(0xFFEDEDED), width: 1)),
                       ),
                     ),
                   ),
@@ -460,15 +459,15 @@ class _NewRestaurantState extends State<NewRestaurant> {
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(4),
                             borderSide: const BorderSide(
-                                color: Color(0xFFEDEDED), width: 1.6)),
+                                color: Color(0xFFEDEDED), width: 1)),
                         focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(4),
                             borderSide: const BorderSide(
-                                color: Color(0xFFEDEDED), width: 1.6)),
+                                color: Color(0xFFEDEDED), width: 1)),
                         enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(4),
                             borderSide: const BorderSide(
-                                color: Color(0xFFEDEDED), width: 1.6)),
+                                color: Color(0xFFEDEDED), width: 1)),
                       ),
                     ),
                   ),
@@ -544,15 +543,15 @@ class _NewRestaurantState extends State<NewRestaurant> {
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(4),
                             borderSide: const BorderSide(
-                                color: Color(0xFFEDEDED), width: 1.6)),
+                                color: Color(0xFFEDEDED), width: 1)),
                         focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(4),
                             borderSide: const BorderSide(
-                                color: Color(0xFFEDEDED), width: 1.6)),
+                                color: Color(0xFFEDEDED), width: 1)),
                         enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(4),
                             borderSide: const BorderSide(
-                                color: Color(0xFFEDEDED), width: 1.6)),
+                                color: Color(0xFFEDEDED), width: 1)),
                       ),
                     ),
                   ),
@@ -575,7 +574,7 @@ class _NewRestaurantState extends State<NewRestaurant> {
                       Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(1),
-                          border: Border.all(color: Colors.white, width: 1.6),
+                          border: Border.all(color: Colors.white, width: 1),
                         ),
                         width: 144,
                         height: 144,
@@ -686,18 +685,15 @@ class _NewRestaurantState extends State<NewRestaurant> {
                                   border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(4),
                                       borderSide: const BorderSide(
-                                          color: Color(0xFFEDEDED),
-                                          width: 1.6)),
+                                          color: Color(0xFFEDEDED), width: 1)),
                                   focusedBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(4),
                                       borderSide: const BorderSide(
-                                          color: Color(0xFFEDEDED),
-                                          width: 1.6)),
+                                          color: Color(0xFFEDEDED), width: 1)),
                                   enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(4),
                                       borderSide: const BorderSide(
-                                          color: Color(0xFFEDEDED),
-                                          width: 1.6)),
+                                          color: Color(0xFFEDEDED), width: 1)),
                                 ),
                               ),
                             ),
@@ -722,7 +718,7 @@ class _NewRestaurantState extends State<NewRestaurant> {
                                       color: const Color(0xff484848),
                                       borderRadius: BorderRadius.circular(1),
                                       border: Border.all(
-                                          color: Colors.white, width: 1.6),
+                                          color: Colors.white, width: 1),
                                     ),
                                     child: Center(
                                       child: DropdownButtonHideUnderline(
@@ -752,7 +748,7 @@ class _NewRestaurantState extends State<NewRestaurant> {
                                                             1),
                                                     border: Border.all(
                                                         color: Colors.white,
-                                                        width: 1.6),
+                                                        width: 1),
                                                   ),
                                                   child: Center(
                                                     child: Text(
@@ -785,7 +781,7 @@ class _NewRestaurantState extends State<NewRestaurant> {
                                       color: const Color(0xff484848),
                                       borderRadius: BorderRadius.circular(1),
                                       border: Border.all(
-                                          color: Colors.white, width: 1.6),
+                                          color: Colors.white, width: 1),
                                     ),
                                     child: Center(
                                       child: DropdownButtonHideUnderline(
@@ -814,7 +810,7 @@ class _NewRestaurantState extends State<NewRestaurant> {
                                                             1),
                                                     border: Border.all(
                                                         color: Colors.white,
-                                                        width: 1.6),
+                                                        width: 1),
                                                   ),
                                                   child: Center(
                                                     child: Text(
@@ -847,7 +843,7 @@ class _NewRestaurantState extends State<NewRestaurant> {
                                       color: const Color(0xff484848),
                                       borderRadius: BorderRadius.circular(1),
                                       border: Border.all(
-                                          color: Colors.white, width: 1.6),
+                                          color: Colors.white, width: 1),
                                     ),
                                     child: Center(
                                       child: DropdownButtonHideUnderline(
@@ -876,7 +872,7 @@ class _NewRestaurantState extends State<NewRestaurant> {
                                                             1),
                                                     border: Border.all(
                                                         color: Colors.white,
-                                                        width: 1.6),
+                                                        width: 1),
                                                   ),
                                                   child: Center(
                                                     child: Text(
@@ -1007,15 +1003,15 @@ class _NewRestaurantState extends State<NewRestaurant> {
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(4),
                             borderSide: const BorderSide(
-                                color: Color(0xFFEDEDED), width: 1.6)),
+                                color: Color(0xFFEDEDED), width: 1)),
                         focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(4),
                             borderSide: const BorderSide(
-                                color: Color(0xFFEDEDED), width: 1.6)),
+                                color: Color(0xFFEDEDED), width: 1)),
                         enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(4),
                             borderSide: const BorderSide(
-                                color: Color(0xFFEDEDED), width: 1.6)),
+                                color: Color(0xFFEDEDED), width: 1)),
                       ),
                     ),
                   ),
@@ -1068,15 +1064,15 @@ class _NewRestaurantState extends State<NewRestaurant> {
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(4),
                             borderSide: const BorderSide(
-                                color: Color(0xFFEDEDED), width: 1.6)),
+                                color: Color(0xFFEDEDED), width: 1)),
                         focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(4),
                             borderSide: const BorderSide(
-                                color: Color(0xFFEDEDED), width: 1.6)),
+                                color: Color(0xFFEDEDED), width: 1)),
                         enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(4),
                             borderSide: const BorderSide(
-                                color: Color(0xFFEDEDED), width: 1.6)),
+                                color: Color(0xFFEDEDED), width: 1)),
                       ),
                     ),
                   ),

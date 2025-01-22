@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 
 class Item {
@@ -16,6 +17,15 @@ class Item {
     required this.isDeleted,
     this.image,
   });
+
+  Future<Map<String, dynamic>> toJson() async {
+    return {
+      'name': name,
+      'recipe': recipe,
+      'cost': cost,
+      'image': image == null ? null : base64Encode(image!), // image is null if not provided, no need to handle separately
+    };
+  }
 
 
   factory Item.fromMap(Map<String, dynamic> map) {
