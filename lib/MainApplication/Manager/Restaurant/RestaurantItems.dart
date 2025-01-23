@@ -57,6 +57,7 @@ class _RestaurantItemsState extends State<RestaurantItems> {
   @override
   void initState() {
     categories = widget.categories;
+    getImages();
     for (var i in categories) {
       categoryController.add(TextEditingController(text: i.name));
       List<TextEditingController> tempName = [];
@@ -68,7 +69,6 @@ class _RestaurantItemsState extends State<RestaurantItems> {
             .add(TextEditingController(text: j.cost.toString()));
         selectedCategory.add(i);
         isBeingEdited.add(true);
-        getImages(j.image);
         tempName.add(TextEditingController(text: j.name));
       }
       itemNameController.add(tempName);
@@ -76,8 +76,13 @@ class _RestaurantItemsState extends State<RestaurantItems> {
     super.initState();
   }
 
-  Future<void> getImages(Uint8List? uint8List) async {
-    _image.add(await uint8ListToFile(uint8List));
+  Future<bool> getImages() async {
+    for (var i in categories) {
+      for (var j in i.items) {
+        final data = _image.add(await uint8ListToFile(j.image));
+      }
+    }
+    return true;
   }
 
   Future<int> getAndroidVersion() async {

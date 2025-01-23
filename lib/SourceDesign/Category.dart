@@ -38,7 +38,6 @@ class Category {
         ));
     String categoriesJson =
         jsonEncode(categories.map((category) => category.toJson()).toList());
-    print(categoriesJson);
     try {
       connection;
       var result = await connection.execute(
@@ -99,7 +98,9 @@ class Category {
   factory Category.fromMap(Map<String, dynamic> map) {
     return Category(
       name: map['category_name'] as String,
-      items: (map['items'] as List<dynamic>).map((itemMap) => Item.fromMap(itemMap as Map<String, dynamic>)).toList(),
+      items: (map['items'] as List<dynamic>)
+          .map((itemMap) => Item.fromMap(itemMap as Map<String, dynamic>))
+          .toList(),
     );
   }
 
@@ -109,37 +110,3 @@ class Category {
         .toList();
   }
 }
-
-// [
-//   {
-//     "name": "Starters",
-//     "items": [
-//       {
-//         "name": "Soup",
-//         "recipe": "Soup Recipe",
-//         "cost": 4.99,
-//         "isDeleted": false,
-//         "image": null
-//       },
-//       {
-//         "name": "Salad",
-//         "recipe": "Salad Recipe",
-//         "cost": 5.99,
-//         "isDeleted": false,
-//         "image": null
-//       }
-//     ]
-//   },
-//   {
-//     "name": "Main Course",
-//     "items": [
-//       {
-//         "name": "Steak",
-//         "recipe": "Steak Recipe",
-//         "cost": 19.99,
-//         "isDeleted": false,
-//         "image": null
-//       }
-//     ]
-//   }
-// ]
