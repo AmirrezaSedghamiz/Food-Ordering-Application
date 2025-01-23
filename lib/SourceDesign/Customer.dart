@@ -14,7 +14,7 @@ class Customer {
   String phoneNumber;
   Uint8List? image;
   Address? selectedAddress;
-  List<Address>? addresses;
+  List<Address> addresses = [];
 
   Customer({
     required this.customerId,
@@ -70,14 +70,12 @@ class Customer {
           customerID: customer.customerId);
       var addresses = (await Address.getUserAddress(username: username)) ?? [];
       for (var i in addresses) {
-        addresses.add(i);
+        customer.addresses.add(i);
         if (i.isSelected) {
           customer.selectedAddress = i;
         }
       }
-      print('after for');
       customer.addresses = addresses;
-      print('after this');
       await connection.close();
       return customer;
     } catch (e) {

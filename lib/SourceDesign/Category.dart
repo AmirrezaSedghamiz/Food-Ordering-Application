@@ -16,7 +16,10 @@ class Category {
   Map<String, dynamic> toJson() {
     return {
       'name': name,
-      'items': items.map((item) => item.toJson()).toList(),
+      'items': items.map((item) {
+        final data = item.toJson();
+        return data;
+      }).toList(),
     };
   }
 
@@ -33,17 +36,18 @@ class Category {
         settings: const ConnectionSettings(
           sslMode: SslMode.disable,
         ));
-    List<dynamic> inp = [];
-    for (var i in categories) {
-      inp.add(i.toJson());
-    }
-    print(inp.toString());
+    String categoriesJson =
+        jsonEncode(categories.map((category) => category.toJson()).toList());
+    print(categoriesJson);
     try {
       connection;
       var result = await connection.execute(
           Sql.named(
               'SELECT update_categories_with_items(@restaurant_id ,@categories)'),
-          parameters: {'restaurant_id': restaurantId, 'categories': inp});
+          parameters: {
+            'restaurant_id': restaurantId,
+            'categories': categoriesJson
+          });
       print('Success');
     } catch (e) {
       print('Error: $e');
@@ -82,6 +86,7 @@ class Category {
       dynamic finalRes = result[0][0];
       print(finalRes);
       final value = Category.fromJson(finalRes);
+      print('afdafsdfsdsdf');
       return value;
     } catch (e) {
       print('Error: $e');
@@ -94,16 +99,12 @@ class Category {
   factory Category.fromMap(Map<String, dynamic> map) {
     return Category(
       name: map['category_name'] as String,
-      items: (map['items'] as List<dynamic>?)
-              ?.map((itemMap) => Item.fromMap(itemMap))
-              .toList() ??
-          [],
+      items: (map['items'] as List<dynamic>).map((itemMap) => Item.fromMap(itemMap as Map<String, dynamic>)).toList(),
     );
   }
 
-  static List<Category> fromJson(String source) {
-    final List<dynamic> jsonList = json.decode(source);
-    return jsonList
+  static List<Category> fromJson(List<dynamic> source) {
+    return source
         .map((jsonCategory) => Category.fromMap(jsonCategory))
         .toList();
   }

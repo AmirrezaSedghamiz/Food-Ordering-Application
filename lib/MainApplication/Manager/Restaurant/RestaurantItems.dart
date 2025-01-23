@@ -54,6 +54,32 @@ class _RestaurantItemsState extends State<RestaurantItems> {
   List<bool> isBeingEdited = [];
   List<File?> _image = [];
 
+  @override
+  void initState() {
+    categories = widget.categories;
+    for (var i in categories) {
+      categoryController.add(TextEditingController(text: i.name));
+      List<TextEditingController> tempName = [];
+      for (var j in i.items) {
+        allItems.add(j);
+        allItemsNameController.add(TextEditingController(text: j.name));
+        allItemsRecipeController.add(TextEditingController(text: j.recipe));
+        allItemsCostController
+            .add(TextEditingController(text: j.cost.toString()));
+        selectedCategory.add(i);
+        isBeingEdited.add(true);
+        getImages(j.image);
+        tempName.add(TextEditingController(text: j.name));
+      }
+      itemNameController.add(tempName);
+    }
+    super.initState();
+  }
+
+  Future<void> getImages(Uint8List? uint8List) async {
+    _image.add(await uint8ListToFile(uint8List));
+  }
+
   Future<int> getAndroidVersion() async {
     final deviceInfo = DeviceInfoPlugin();
     final androidInfo = await deviceInfo.androidInfo;
@@ -336,24 +362,6 @@ class _RestaurantItemsState extends State<RestaurantItems> {
         )),
       ),
     );
-  }
-
-  @override
-  void initState() {
-    categories = widget.categories;
-    for (var i in categories) {
-      categoryController.add(TextEditingController(text: i.name));
-      List<TextEditingController> tempName = [];
-      List<TextEditingController> tempRecipe = [];
-      List<TextEditingController> tempCost = [];
-      for (var j in i.items) {
-        tempName.add(TextEditingController(text: j.name));
-        tempRecipe.add(TextEditingController(text: j.recipe));
-        tempCost.add(TextEditingController(text: j.cost.toString()));
-      }
-      itemNameController.add(tempName);
-    }
-    super.initState();
   }
 
   @override
@@ -1230,7 +1238,7 @@ class _RestaurantItemsState extends State<RestaurantItems> {
                               }
                             : () {},
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.orange,
+                          backgroundColor: const Color(0xFFF56949),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(5)),
                         ),

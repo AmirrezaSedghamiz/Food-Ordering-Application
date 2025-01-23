@@ -1180,7 +1180,7 @@ class _NewRestaurantState extends State<NewRestaurant> {
                                 }
                               : () {},
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.orange,
+                            backgroundColor: const Color(0xFFF56949),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(5)),
                           ),

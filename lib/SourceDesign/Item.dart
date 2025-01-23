@@ -9,7 +9,7 @@ class Item {
   double cost;
   bool isDeleted;
   Uint8List? image;
-  
+
   Item({
     required this.name,
     required this.recipe,
@@ -18,47 +18,49 @@ class Item {
     this.image,
   });
 
-  Future<Map<String, dynamic>> toJson() async {
+  Map<String, dynamic> toJson() {
     return {
       'name': name,
       'recipe': recipe,
       'cost': cost,
-      'image': image == null ? null : base64Encode(image!), // image is null if not provided, no need to handle separately
+      'image': image == null
+          ? null
+          : base64Encode(
+              image!), // image is null if not provided, no need to handle separately
     };
   }
 
-
   factory Item.fromMap(Map<String, dynamic> map) {
+    print('weee2');
     return Item(
       name: map['name'] as String,
       recipe: map['recipe'] as String,
-      cost: map['cost'] as double,
+      cost: double.parse(map['cost'].toString()),
       isDeleted: map['isdeleted'] as bool,
       image: map['image'] != null ? base64Decode(map['image']) : null,
     );
   }
 
-
-  factory Item.fromJson(String source) => Item.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory Item.fromJson(String source) =>
+      Item.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   bool operator ==(covariant Item other) {
     if (identical(this, other)) return true;
-  
-    return 
-      other.name == name &&
-      other.recipe == recipe &&
-      other.cost == cost &&
-      other.isDeleted == isDeleted &&
-      other.image == image;
+
+    return other.name == name &&
+        other.recipe == recipe &&
+        other.cost == cost &&
+        other.isDeleted == isDeleted &&
+        other.image == image;
   }
 
   @override
   int get hashCode {
     return name.hashCode ^
-      recipe.hashCode ^
-      cost.hashCode ^
-      isDeleted.hashCode ^
-      image.hashCode;
+        recipe.hashCode ^
+        cost.hashCode ^
+        isDeleted.hashCode ^
+        image.hashCode;
   }
 }

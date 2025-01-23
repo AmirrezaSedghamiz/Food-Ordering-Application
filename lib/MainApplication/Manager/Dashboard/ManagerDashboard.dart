@@ -176,7 +176,7 @@ class ManagerDashboard extends StatelessWidget {
                               await Category.getCategoriesByRestaurantId(
                                       restaurantId: restaurantId!,
                                       page: 1,
-                                      pageSize: 5) ??
+                                      pageSize: 30) ??
                                   [];
                           AnimationNavigation.navigatePush(
                               RestaurantItems(
