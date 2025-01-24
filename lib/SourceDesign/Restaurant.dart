@@ -111,6 +111,85 @@ class Restaurant {
     return null;
   }
 
+  static Future<List<Restaurant>?> searchRestaurantByName(
+      {required String name, required int pageNumber}) async {
+    final connection = await Connection.open(
+        Endpoint(
+          host: '163.5.94.58',
+          port: 5432,
+          database: 'mashmammad',
+          username: 'postgres',
+          password: 'Erfank2004@',
+        ),
+        settings: const ConnectionSettings(
+          sslMode: SslMode.disable,
+        ));
+
+    try {
+      connection;
+      var result = await connection.execute(
+          Sql.named(
+              'SELECT search_restaurants_by_name(@search_term, @page_number, @rows_per_page)'),
+          parameters: {
+            'search_term': name,
+            'page_number': pageNumber,
+            'rows_per_page': 4
+          });
+      dynamic finalRes = result[0][0];
+      List<Restaurant> results = [];
+      for (var i in finalRes['restaurants']) {
+        results.add(Restaurant.fromMap(i));
+      }
+      return results;
+    } catch (e) {
+      print('Error: $e');
+    } finally {
+      await connection.close();
+    }
+    return null;
+  }
+
+  static Future<List<Restaurant>?> getNeaRestaurant(
+      {required LatLng location, required int pageNumber}) async {
+    final connection = await Connection.open(
+        Endpoint(
+          host: '163.5.94.58',
+          port: 5432,
+          database: 'mashmammad',
+          username: 'postgres',
+          password: 'Erfank2004@',
+        ),
+        settings: const ConnectionSettings(
+          sslMode: SslMode.disable,
+        ));
+
+    try {
+      connection;
+      var result = await connection.execute(
+          Sql.named(
+              'SELECT get_nearest_restaurants(@user_longitude , @user_latitude , @page_number , @rows_per_page)'),
+          parameters: {
+            'user_longitude': location.longitude,
+            'user_latitude': location.latitude,
+            'page_number': pageNumber,
+            'rows_per_page': 4,
+          });
+      print("IN HEREEEEEEEEEEEee");
+      dynamic finalRes = result[0][0];
+      List<Restaurant> results = [];
+      for (var i in finalRes['restaurants']) {
+        results.add(Restaurant.fromMap(i));
+      }
+      print(results.toString());
+      return results;
+    } catch (e) {
+      print('Error: $e');
+    } finally {
+      await connection.close();
+    }
+    return null;
+  }
+
   factory Restaurant.fromMap(Map<String, dynamic> map) {
     return Restaurant(
         restaurantId: map['restaurantid'] as int,

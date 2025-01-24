@@ -19,7 +19,7 @@ class Address {
         isSelected: map['isselected'],
         addressId: map['addressid'],
         address: map['addressstring'],
-        point: LatLng(map['latitude'], map['longtitude']));
+        point: LatLng(double.parse(map['latitude'].toString()), double.parse(map['longtitude'].toString())));
   }
 
   static Future<void> insertAddress({
@@ -83,11 +83,8 @@ class Address {
             'page_size': 30,
           });
       dynamic finalData = result[0][0];
-      if (finalData == null) {
-        return [];
-      }
       List<Address> addresses = [];
-      for (var i in finalData['addresses']) {
+      for (var i in finalData['addresses'] ?? []) {
         addresses.add(Address.fromMap(i));
       }
       return addresses;
@@ -96,5 +93,10 @@ class Address {
     } finally {
       await connection.close();
     }
+  }
+
+  @override
+  String toString() {
+    return 'Address(addressId: $addressId, address: $address, isSelected: $isSelected, point: $point)';
   }
 }

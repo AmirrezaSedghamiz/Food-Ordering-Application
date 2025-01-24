@@ -95,6 +95,7 @@ class ManagerDashboard extends StatelessWidget {
                             List<DayHour> dayHours = await DayHour.getDayHours(
                                     restaurantId: restaurant.restaurantId) ??
                                 [];
+                            dayHours.sort((a, b) => a.dayOfWeek.index.compareTo(b.dayOfWeek.index));
                             List<WeekDay> weekDay = [
                               WeekDay.SUNDAY,
                               WeekDay.SATURADY,

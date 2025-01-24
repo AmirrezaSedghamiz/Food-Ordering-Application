@@ -1088,7 +1088,7 @@ class _NewRestaurantState extends State<NewRestaurant> {
                               ? () async {
                                   bool flag = false;
                                   if (_image == null ||
-                                      timeControllers.isEmpty) {
+                                      timeControllers.length < 7)  {
                                     flag = true;
                                   }
                                   if (nameController.text.isEmpty) {

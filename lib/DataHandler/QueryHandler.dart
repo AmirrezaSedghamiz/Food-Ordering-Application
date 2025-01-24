@@ -1,3 +1,4 @@
+import 'package:data_base_project/SourceDesign/Address.dart';
 import 'package:data_base_project/SourceDesign/Admin.dart';
 import 'package:data_base_project/SourceDesign/Customer.dart';
 import 'package:data_base_project/SourceDesign/Manager.dart';
@@ -30,7 +31,19 @@ class LoginQuery {
           });
       dynamic finalUser = result[0][0];
       if (finalUser['role'] == 'customer') {
-        return Customer.fromMap(finalUser['user']);
+        Customer customer = Customer.fromMap(finalUser['user']);
+        print(customer.toString());
+        var addresses =
+            (await Address.getUserAddress(username: customer.username)) ?? [];
+        for (var i in addresses) {
+          print(i.toString());
+          customer.addresses.add(i);
+          if (i.isSelected) {
+            customer.selectedAddress = i;
+          }
+        }
+        customer.addresses = addresses;
+        return customer;
       } else if (finalUser['role'] == 'manager') {
         return Manager.fromMap(finalUser['user']);
       } else if (finalUser['role'] == 'admin') {

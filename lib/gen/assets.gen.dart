@@ -110,6 +110,22 @@ class $AssetsImagesGen {
   /// File path: assets/images/abort.png
   AssetGenImage get abort => const AssetGenImage('assets/images/abort.png');
 
+  /// File path: assets/images/addToShoppingCart.png
+  AssetGenImage get addToShoppingCart =>
+      const AssetGenImage('assets/images/addToShoppingCart.png');
+
+  /// File path: assets/images/addressShit.png
+  AssetGenImage get addressShit =>
+      const AssetGenImage('assets/images/addressShit.png');
+
+  /// File path: assets/images/comments.png
+  AssetGenImage get comments =>
+      const AssetGenImage('assets/images/comments.png');
+
+  /// File path: assets/images/defaultFood.png
+  AssetGenImage get defaultFood =>
+      const AssetGenImage('assets/images/defaultFood.png');
+
   /// File path: assets/images/defaultProfile.png
   AssetGenImage get defaultProfile =>
       const AssetGenImage('assets/images/defaultProfile.png');
@@ -119,6 +135,10 @@ class $AssetsImagesGen {
 
   /// File path: assets/images/edit.png
   AssetGenImage get edit => const AssetGenImage('assets/images/edit.png');
+
+  /// File path: assets/images/editpicIcon.png
+  AssetGenImage get editpicIcon =>
+      const AssetGenImage('assets/images/editpicIcon.png');
 
   /// File path: assets/images/submit.png
   AssetGenImage get submit => const AssetGenImage('assets/images/submit.png');
@@ -133,9 +153,14 @@ class $AssetsImagesGen {
         signUpImage,
         signUpPageTop,
         abort,
+        addToShoppingCart,
+        addressShit,
+        comments,
+        defaultFood,
         defaultProfile,
         delete,
         edit,
+        editpicIcon,
         submit
       ];
 }

@@ -2,10 +2,10 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:data_base_project/DataHandler/QueryHandler.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:postgres/postgres.dart';
 
+import 'package:data_base_project/DataHandler/QueryHandler.dart';
 import 'package:data_base_project/SourceDesign/Address.dart';
 
 class Customer {
@@ -84,5 +84,10 @@ class Customer {
       await connection.close();
     }
     return null;
+  }
+
+  @override
+  String toString() {
+    return 'Customer(customerId: $customerId, username: $username, phoneNumber: $phoneNumber, image: $image, selectedAddress: $selectedAddress, addresses: $addresses)';
   }
 }
