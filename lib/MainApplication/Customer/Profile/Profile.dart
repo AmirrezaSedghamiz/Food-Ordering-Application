@@ -589,6 +589,9 @@ class _ProfileState extends State<Profile> {
                                                   setState(() {
                                                     customer.addresses[index]
                                                         .isSelected = true;
+                                                    customer.selectedAddress =
+                                                        customer
+                                                            .addresses[index];
                                                   });
                                                 },
                                                 child: Assets.images.whiteDot

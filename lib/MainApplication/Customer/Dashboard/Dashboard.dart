@@ -200,6 +200,7 @@ class _DashboardState extends State<Dashboard> {
         print(dayHours.length);
         AnimationNavigation.navigatePush(
             RestaurantPage(
+              customer: widget.customer,
               categories: categories,
               restaurant: restaurant,
               allHours: allDays,

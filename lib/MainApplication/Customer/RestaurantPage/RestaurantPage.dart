@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:data_base_project/SourceDesign/Customer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -16,7 +17,10 @@ class RestaurantPage extends StatefulWidget {
       required this.restaurant,
       required this.dayHour,
       required this.allHours,
+      required this.customer,
       required this.categories});
+
+  final Customer customer;
   final Restaurant restaurant;
   final String dayHour;
   final List<String> allHours;
@@ -280,10 +284,17 @@ class _RestaurantPageState extends State<RestaurantPage> {
   }
 
   void showCustomDialog(BuildContext context) {
+    final Distance distance = Distance();
+    final double distanceInMeters = distance.as(
+      LengthUnit.Kilometer, // Unit: Kilometer
+      widget.restaurant.point,
+      widget.customer.selectedAddress!.point,
+    );
     showDialog(
       context: context,
       builder: (context) => CustomDialog(
         restaurant: widget.restaurant,
+        isInRange: widget.restaurant.deliveryRadius >= distanceInMeters,
       ),
     );
   }
@@ -324,123 +335,6 @@ class _RestaurantPageState extends State<RestaurantPage> {
           ),
         ),
       ),
-    );
-  }
-}
-
-class CustomDialog extends StatelessWidget {
-  final Restaurant restaurant;
-
-  const CustomDialog({super.key, required this.restaurant});
-
-  @override
-  Widget build(BuildContext context) {
-    return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(6), // Custom rounded borders
-      ),
-      backgroundColor: const Color(0xDFF56949), // Custom background color
-      child: Padding(
-        padding: const EdgeInsets.all(30.0), // Padding inside the dialog
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment
-              .spaceEvenly, // Shrink-wrap the dialog to its contents
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Align(
-                alignment: Alignment.topCenter,
-                child: MapWidget(location: restaurant.point)),
-            const SizedBox(height: 16),
-            Text(
-              restaurant.address,
-              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 20),
-              textAlign: TextAlign.start,
-              maxLines: 2,
-            ),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                Assets.images.addressShit.image(width: 25, height: 25),
-                const SizedBox(
-                  width: 8,
-                ),
-                Text(
-                  'هزینه ارسال : ${restaurant.deliveryFee.toInt()} هزار تومان',
-                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w400,
-                      fontSize: 15),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class CustomDialogDays extends StatelessWidget {
-  final List<String> dayHours;
-
-  const CustomDialogDays({super.key, required this.dayHours});
-
-  @override
-  Widget build(BuildContext context) {
-    return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(6), // Custom rounded borders
-      ),
-      backgroundColor: const Color(0xDFF56949), // Custom background color
-      child: Padding(
-          padding: const EdgeInsets.all(30.0), // Padding inside the dialog
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: dayHours.length,
-                itemBuilder: (context, index) {
-                  if (index != dayHours.length - 1) {
-                    return Column(
-                      children: [
-                        Text(
-                          dayHours[index],
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge!
-                              .copyWith(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 15),
-                        ),
-                        const Divider(
-                          color: Colors.white,
-                          thickness: 1,
-                        )
-                      ],
-                    );
-                  }
-                  return Column(
-                    children: [
-                      Text(
-                        dayHours[index],
-                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 15),
-                      ),
-                    ],
-                  );
-                },
-              ),
-            ],
-          )),
     );
   }
 }
@@ -596,6 +490,136 @@ class ItemCart extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class CustomDialog extends StatelessWidget {
+  final Restaurant restaurant;
+  final bool isInRange;
+
+  const CustomDialog(
+      {super.key, required this.restaurant, required this.isInRange});
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(6), // Custom rounded borders
+      ),
+      backgroundColor: const Color(0xDFF56949), // Custom background color
+      child: Padding(
+        padding: const EdgeInsets.all(30.0), // Padding inside the dialog
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment
+              .spaceEvenly, // Shrink-wrap the dialog to its contents
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Align(
+                alignment: Alignment.topCenter,
+                child: MapWidget(location: restaurant.point)),
+            const SizedBox(height: 16),
+            Text(
+              restaurant.address,
+              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 20),
+              textAlign: TextAlign.start,
+              maxLines: 2,
+            ),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Assets.images.addressShit.image(width: 25, height: 25),
+                const SizedBox(
+                  width: 8,
+                ),
+                Text(
+                  'هزینه ارسال : ${restaurant.deliveryFee.toInt()} هزار تومان',
+                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 15),
+                ),
+                if (!isInRange) ...[
+                  const SizedBox(height: 16),
+                  Text(
+                    'پیک رستوران خارج از محدوده ی کنونی شماست',
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 14),
+                    textAlign: TextAlign.start,
+                  ),
+                ]
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class CustomDialogDays extends StatelessWidget {
+  final List<String> dayHours;
+
+  const CustomDialogDays({super.key, required this.dayHours});
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(6), // Custom rounded borders
+      ),
+      backgroundColor: const Color(0xDFF56949), // Custom background color
+      child: Padding(
+          padding: const EdgeInsets.all(30.0), // Padding inside the dialog
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: dayHours.length,
+                itemBuilder: (context, index) {
+                  if (index != dayHours.length - 1) {
+                    return Column(
+                      children: [
+                        Text(
+                          dayHours[index],
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyLarge!
+                              .copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 15),
+                        ),
+                        const Divider(
+                          color: Colors.white,
+                          thickness: 1,
+                        )
+                      ],
+                    );
+                  }
+                  return Column(
+                    children: [
+                      Text(
+                        dayHours[index],
+                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 15),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ],
+          )),
     );
   }
 }

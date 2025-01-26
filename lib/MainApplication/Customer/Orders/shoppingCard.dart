@@ -3,13 +3,14 @@ import 'dart:io';
 import 'package:data_base_project/GlobalWidgets/GlobalAppBar.dart';
 import 'package:data_base_project/GlobalWidgets/UintToFile.dart';
 import 'package:data_base_project/SourceDesign/Customer.dart';
+import 'package:data_base_project/SourceDesign/ItemOrder.dart';
 import 'package:data_base_project/SourceDesign/Order.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class OrderSummaryPage extends StatefulWidget {
   final Customer customer;
-  final List<Order> orders;
+  final List<ItemOrder> orders;
   OrderSummaryPage({super.key, required this.orders, required this.customer});
 
   @override
