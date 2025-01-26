@@ -274,12 +274,15 @@ class _ProfileStateManager extends State<ProfileManager> {
                   ),
                   Align(
                     alignment: Alignment.centerRight,
-                    child: Text(
-                      'عکس پروفایل رستوران',
-                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                          color: const Color(0xFFFEC37D),
-                          fontWeight: FontWeight.w400,
-                          fontSize: 18),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Text(
+                        'عکس پروفایل',
+                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                            color: const Color(0xFFFEC37D),
+                            fontWeight: FontWeight.w400,
+                            fontSize: 18),
+                      ),
                     ),
                   ),
                   SizedBox(

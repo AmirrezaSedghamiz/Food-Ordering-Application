@@ -183,19 +183,21 @@ class _DashboardState extends State<Dashboard> {
           WeekDay.FRIDAY
         ];
         List<String> allDays = [];
-        String todayHours = '';
+        String todayHours = 'امروز سرویس دهی نداریم';
         for (var i in dayHours) {
           allDays.add(
               "${myDays[weekDay.indexOf(i.dayOfWeek)]} : ${convertPostgresTimeToHours(i.startHour)} - ${convertPostgresTimeToHours(i.endHour)}");
           if (today - 1 == weekDay.indexOf(i.dayOfWeek)) {
             todayHours =
                 "${myDays[today - 1]} : ${convertPostgresTimeToHours(i.startHour)} - ${convertPostgresTimeToHours(i.endHour)}";
-            print(todayHours);
           }
         }
         List<Category> categories = await Category.getCategoriesByRestaurantId(
                 restaurantId: restaurant.restaurantId, page: 1, pageSize: 30) ??
             [];
+        print(categories.length);
+        print(allDays.length);
+        print(dayHours.length);
         AnimationNavigation.navigatePush(
             RestaurantPage(
               categories: categories,

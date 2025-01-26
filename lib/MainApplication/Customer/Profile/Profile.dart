@@ -285,12 +285,15 @@ class _ProfileState extends State<Profile> {
                   ),
                   Align(
                     alignment: Alignment.centerRight,
-                    child: Text(
-                      'عکس پروفایل رستوران',
-                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                          color: const Color(0xFFFEC37D),
-                          fontWeight: FontWeight.w400,
-                          fontSize: 18),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Text(
+                        'عکس پروفایل',
+                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                            color: const Color(0xFFFEC37D),
+                            fontWeight: FontWeight.w400,
+                            fontSize: 18),
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -606,20 +609,21 @@ class _ProfileState extends State<Profile> {
                                   readOnly: true,
                                 ),
                               ),
-                               customer.addresses[index]
-                                                        .isSelected ? const SizedBox() : IconButton(
-                                icon: const Icon(
-                                  CupertinoIcons.delete,
-                                  color: Colors.white,
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    addressControllers.removeAt(index);
-                                    customer.addresses.removeAt(index);
-                                    addressLocations.removeAt(index);
-                                  });
-                                },
-                              ),
+                              customer.addresses[index].isSelected
+                                  ? const SizedBox()
+                                  : IconButton(
+                                      icon: const Icon(
+                                        CupertinoIcons.delete,
+                                        color: Colors.white,
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          addressControllers.removeAt(index);
+                                          customer.addresses.removeAt(index);
+                                          addressLocations.removeAt(index);
+                                        });
+                                      },
+                                    ),
                             ],
                           ),
                         );
@@ -668,10 +672,12 @@ class _ProfileState extends State<Profile> {
                                         image: _image);
                                     List<int> inp = [];
                                     for (var i in customer.addresses) {
-                                      if (i.addressId != -1 ) {
+                                      if (i.addressId != -1) {
                                         inp.add(i.addressId);
                                       }
                                     }
+                                    print(customer.customerId);
+                                    print(inp.toString());
                                     final data1 = await Address.updateAddresses(
                                         customerId: customer.customerId,
                                         addresses: customer.addresses,

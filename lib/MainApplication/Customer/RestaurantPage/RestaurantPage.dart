@@ -230,7 +230,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
                   child: ListView.builder(
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
-                    physics: const NeverScrollableScrollPhysics(),
+                    physics: const BouncingScrollPhysics(),
                     itemCount: widget.categories.length,
                     itemBuilder: (context, index) {
                       return Padding(

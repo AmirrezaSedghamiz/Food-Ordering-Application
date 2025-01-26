@@ -83,7 +83,6 @@ class Category {
             'page_size': pageSize,
           });
       dynamic finalRes = result[0][0];
-      print(finalRes);
       final value = Category.fromJson(finalRes);
       print('afdafsdfsdsdf');
       return value;
@@ -98,7 +97,7 @@ class Category {
   factory Category.fromMap(Map<String, dynamic> map) {
     return Category(
       name: map['category_name'] as String,
-      items: (map['items'] as List<dynamic>)
+      items: ((map['items']?? []) as List<dynamic>)
           .map((itemMap) => Item.fromMap(itemMap as Map<String, dynamic>))
           .toList(),
     );

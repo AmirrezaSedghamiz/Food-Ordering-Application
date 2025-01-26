@@ -380,8 +380,8 @@ class _RestaurantItemsState extends State<RestaurantItems> {
           child: Center(
             child: GlobalAppBar(
               manager: widget.manager,
-                    isManager: true,
-                    customer: null,
+              isManager: true,
+              customer: null,
               image: widget.image,
               username: widget.manager.username,
               shouldPop: true,

@@ -347,8 +347,8 @@ class _NewRestaurantState extends State<NewRestaurant> {
           child: Center(
             child: GlobalAppBar(
               manager: widget.manager,
-                isManager: true,
-                customer: null,
+              isManager: true,
+              customer: null,
               image: widget.image,
               username: widget.manager.username,
               shouldPop: true,
@@ -510,7 +510,7 @@ class _NewRestaurantState extends State<NewRestaurant> {
                               AnimationNavigation.navigatePush(
                                   MapBuilder(
                                     isInProfile: false,
-                                          customer: null,
+                                    customer: null,
                                     startHour: startHour,
                                     endHour: endHour,
                                     day: day,
@@ -1092,8 +1092,7 @@ class _NewRestaurantState extends State<NewRestaurant> {
                           onPressed: !isLoading
                               ? () async {
                                   bool flag = false;
-                                  if (_image == null ||
-                                      timeControllers.length < 7)  {
+                                  if (_image == null) {
                                     flag = true;
                                   }
                                   if (nameController.text.isEmpty) {

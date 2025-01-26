@@ -98,6 +98,7 @@ class Address {
 
   Map<String, dynamic> toJson() {
     return {
+      "addressid" : addressId,
       "addressstring": address,
       "longtitude": point.longitude,
       "latitude": point.latitude,
@@ -128,6 +129,7 @@ class Address {
         listAddresses.add(i.toJson());
       }
       final dict = {'existing': existingIds, 'new': listAddresses};
+      print(dict);
       var result = await connection.execute(
           Sql.named('CALL manage_addresses(@p_customerid, @p_addresses)'),
           parameters: {

@@ -76,9 +76,9 @@ class ManagerDashboard extends StatelessWidget {
                           if (restaurant == null) {
                             AnimationNavigation.navigatePush(
                                 NewRestaurant(
-                                  startHour: const [],
-                                  endHour: const [],
-                                  day: const [],
+                                  startHour: [],
+                                  endHour: [],
+                                  day: [],
                                   restaurantIdConfirm: restaurant?.restaurantId,
                                   restaurantPic: null,
                                   phoneNumber: null,
@@ -158,9 +158,9 @@ class ManagerDashboard extends StatelessWidget {
                           if (restaurantId == null) {
                             AnimationNavigation.navigatePush(
                                 NewRestaurant(
-                                  startHour: const [],
-                                  endHour: const [],
-                                  day: const [],
+                                  startHour: [],
+                                  endHour: [],
+                                  day: [],
                                   restaurantIdConfirm: null,
                                   restaurantPic: null,
                                   phoneNumber: null,
