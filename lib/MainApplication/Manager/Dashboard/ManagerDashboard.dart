@@ -51,6 +51,9 @@ class ManagerDashboard extends StatelessWidget {
                 preferredSize: const Size.fromHeight(75),
                 child: Center(
                   child: GlobalAppBar(
+                    manager: manager,
+                    isManager: true,
+                    customer: null,
                     image: imageFile,
                     username: manager.username,
                     shouldPop: false,

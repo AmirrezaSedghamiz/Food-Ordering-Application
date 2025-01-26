@@ -1,10 +1,17 @@
+import 'package:data_base_project/GlobalWidgets/AnimationNavigation.dart';
+import 'package:data_base_project/MainApplication/Customer/Dashboard/Dashboard.dart';
+import 'package:data_base_project/MainApplication/Customer/Profile/Profile.dart';
+import 'package:data_base_project/SourceDesign/Customer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/svg.dart';
 
 class GlobalBottomNavigator extends StatelessWidget {
   const GlobalBottomNavigator({
     super.key,
+    required this.customer,
   });
+
+  final Customer customer;
 
   @override
   Widget build(BuildContext context) {
@@ -28,22 +35,35 @@ class GlobalBottomNavigator extends StatelessWidget {
               'assets/icon/MapPinIcon.svg',
               'assets/icon/ProfileIcon.svg'
             ];
-            return Container(
-              width: MediaQuery.of(context).size.width * 0.15,
-              height: MediaQuery.of(context).size.width * 0.15,
-              decoration: const BoxDecoration(
-                color: Color(0xff1D1A19),
-                shape: BoxShape.circle,
-              ),
-              child: Center(
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.08,
-                  height: MediaQuery.of(context).size.width * 0.08,
-                  child: SvgPicture.asset(
-                    icons[index],
-                    width: 12,
-                    height: 12,
-                    fit: BoxFit.cover,
+            final functions = [
+              () => AnimationNavigation.navigatePopAllReplace(
+                  Dashboard(customer: customer), context),
+              () => AnimationNavigation.navigatePush(
+                  Dashboard(customer: customer), context),
+              () => AnimationNavigation.navigatePush(
+                  Dashboard(customer: customer), context),
+              () => AnimationNavigation.navigatePush(
+                  Profile(customer: customer), context),
+            ];
+            return GestureDetector(
+              onTap: functions[index],
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.15,
+                height: MediaQuery.of(context).size.width * 0.15,
+                decoration: const BoxDecoration(
+                  color: Color(0xff1D1A19),
+                  shape: BoxShape.circle,
+                ),
+                child: Center(
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.08,
+                    height: MediaQuery.of(context).size.width * 0.08,
+                    child: SvgPicture.asset(
+                      icons[index],
+                      width: 12,
+                      height: 12,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),

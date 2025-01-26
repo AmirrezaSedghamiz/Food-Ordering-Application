@@ -140,8 +140,16 @@ class $AssetsImagesGen {
   AssetGenImage get editpicIcon =>
       const AssetGenImage('assets/images/editpicIcon.png');
 
+  /// File path: assets/images/greenDot.png
+  AssetGenImage get greenDot =>
+      const AssetGenImage('assets/images/greenDot.png');
+
   /// File path: assets/images/submit.png
   AssetGenImage get submit => const AssetGenImage('assets/images/submit.png');
+
+  /// File path: assets/images/whiteDot.png
+  AssetGenImage get whiteDot =>
+      const AssetGenImage('assets/images/whiteDot.png');
 
   /// List of all assets
   List<AssetGenImage> get values => [
@@ -161,7 +169,9 @@ class $AssetsImagesGen {
         delete,
         edit,
         editpicIcon,
-        submit
+        greenDot,
+        submit,
+        whiteDot
       ];
 }
 

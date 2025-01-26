@@ -19,7 +19,8 @@ class Address {
         isSelected: map['isselected'],
         addressId: map['addressid'],
         address: map['addressstring'],
-        point: LatLng(double.parse(map['latitude'].toString()), double.parse(map['longtitude'].toString())));
+        point: LatLng(double.parse(map['latitude'].toString()),
+            double.parse(map['longtitude'].toString())));
   }
 
   static Future<void> insertAddress({
@@ -88,6 +89,53 @@ class Address {
         addresses.add(Address.fromMap(i));
       }
       return addresses;
+    } catch (e) {
+      print('Error: $e');
+    } finally {
+      await connection.close();
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "addressstring": address,
+      "longtitude": point.longitude,
+      "latitude": point.latitude,
+      "isselected": isSelected,
+    };
+  }
+
+  static Future<void> updateAddresses(
+      {required int customerId,
+      required List<Address> addresses,
+      required List<int> existingIds}) async {
+    final connection = await Connection.open(
+        Endpoint(
+          host: '163.5.94.58',
+          port: 5432,
+          database: 'mashmammad',
+          username: 'postgres',
+          password: 'Erfank2004@',
+        ),
+        settings: const ConnectionSettings(
+          sslMode: SslMode.disable,
+        ));
+
+    try {
+      connection;
+      final listAddresses = [];
+      for (var i in addresses) {
+        listAddresses.add(i.toJson());
+      }
+      final dict = {'existing': existingIds, 'new': listAddresses};
+      var result = await connection.execute(
+          Sql.named('CALL manage_addresses(@p_customerid, @p_addresses)'),
+          parameters: {
+            'p_customerid': customerId,
+            'p_addresses': dict,
+          });
+      print('SUCCESSS');
+      return;
     } catch (e) {
       print('Error: $e');
     } finally {

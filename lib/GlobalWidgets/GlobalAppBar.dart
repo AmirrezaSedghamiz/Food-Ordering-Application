@@ -1,7 +1,11 @@
 import 'dart:io';
 
 import 'package:data_base_project/GlobalWidgets/AnimationNavigation.dart';
+import 'package:data_base_project/MainApplication/Customer/Profile/Profile.dart';
 import 'package:data_base_project/MainApplication/LoginSignUp/LoginPage.dart';
+import 'package:data_base_project/MainApplication/Manager/Profile/ProfileManager.dart';
+import 'package:data_base_project/SourceDesign/Customer.dart';
+import 'package:data_base_project/SourceDesign/Manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -9,11 +13,17 @@ class GlobalAppBar extends StatelessWidget {
   final File? image;
   final String username;
   final bool shouldPop;
+  final Customer? customer;
+  final Manager? manager;
+  final bool isManager;
 
   const GlobalAppBar({
     required this.image,
     required this.username,
     required this.shouldPop,
+    required this.customer,
+    required this.manager,
+    required this.isManager,
     super.key,
   });
 
@@ -26,16 +36,25 @@ class GlobalAppBar extends StatelessWidget {
       leading: Row(
         children: [
           const SizedBox(width: 8),
-          Container(
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              image: DecorationImage(
-                image: (image == null)
-                    ? const AssetImage("assets/images/defaultProfile.png")
-                    : FileImage(image!) as ImageProvider,
-                fit: BoxFit.cover,
+          InkWell(
+            onTap: () {
+              AnimationNavigation.navigatePush(
+                  isManager
+                      ? ProfileManager(manager: manager!)
+                      : Profile(customer: customer!),
+                  context);
+            },
+            child: Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                image: DecorationImage(
+                  image: (image == null)
+                      ? const AssetImage("assets/images/defaultProfile.png")
+                      : FileImage(image!) as ImageProvider,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
           ),

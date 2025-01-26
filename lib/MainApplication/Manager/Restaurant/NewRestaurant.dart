@@ -144,8 +144,8 @@ class _NewRestaurantState extends State<NewRestaurant> {
     });
   }
 
-  File? _image;
   bool isLoading = false;
+  File? _image;
 
   Future<int> getAndroidVersion() async {
     final deviceInfo = DeviceInfoPlugin();
@@ -346,6 +346,9 @@ class _NewRestaurantState extends State<NewRestaurant> {
           preferredSize: const Size.fromHeight(75),
           child: Center(
             child: GlobalAppBar(
+              manager: widget.manager,
+                isManager: true,
+                customer: null,
               image: widget.image,
               username: widget.manager.username,
               shouldPop: true,
@@ -506,6 +509,8 @@ class _NewRestaurantState extends State<NewRestaurant> {
                             onPressed: () {
                               AnimationNavigation.navigatePush(
                                   MapBuilder(
+                                    isInProfile: false,
+                                          customer: null,
                                     startHour: startHour,
                                     endHour: endHour,
                                     day: day,

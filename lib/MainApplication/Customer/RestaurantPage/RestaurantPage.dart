@@ -29,12 +29,12 @@ class _RestaurantPageState extends State<RestaurantPage> {
   bool _isExpanded = false;
   final TextEditingController _searchController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
+  Map<int, int> quantities = {};
 
   @override
   void dispose() {
     _searchController.dispose();
-    _scrollController
-        .dispose(); // Dispose the controller when the widget is removed
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -244,45 +244,32 @@ class _RestaurantPageState extends State<RestaurantPage> {
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.012,
               ),
-              ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: widget.categories.length,
-                controller: _scrollController,
-                itemBuilder: (context, index) {
-                  return Column(
-                    children: [
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 16, 25, 2),
-                          child: Text(
-                            widget.categories[index].name,
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontFamily: "DanaFaNum",
-                              fontWeight: FontWeight.w800,
-                              color: Color(0xFFF56949),
-                            ),
-                          ),
+              Column(
+                children: [
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: widget.categories[selectedIndex].items.length,
+                    itemBuilder: (context, index1) {
+                      final item =
+                          widget.categories[selectedIndex].items[index1];
+                      final itemId = item.hashCode;
+                      return Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 0, 16, 6),
+                        child: ItemCart(
+                          item: item,
+                          quantity: quantities[itemId] ??
+                              0, // Get the quantity for this item
+                          onQuantityChanged: (newQuantity) {
+                            setState(() {
+                              quantities[itemId] = newQuantity;
+                            });
+                          },
                         ),
-                      ),
-                      ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: widget.categories[index].items.length,
-                        itemBuilder: (context, index1) {
-                          return Padding(
-                            padding: const EdgeInsets.fromLTRB(16, 0, 16, 6),
-                            child: ItemCart(
-                                item: widget.categories[index].items[index1]),
-                          );
-                        },
-                      ),
-                      
-                    ],
-                  );
-                },
+                      );
+                    },
+                  ),
+                ],
               ),
               SizedBox(height: MediaQuery.of(context).size.height * 0.015)
             ],
@@ -318,12 +305,6 @@ class _RestaurantPageState extends State<RestaurantPage> {
         setState(() {
           selectedIndex = index;
         });
-        double offset = calculateScrollOffset(index);
-        _scrollController.animateTo(
-          offset,
-          duration: const Duration(milliseconds: 500),
-          curve: Curves.easeInOut,
-        );
       },
       child: Container(
         width: 87,
@@ -344,24 +325,6 @@ class _RestaurantPageState extends State<RestaurantPage> {
         ),
       ),
     );
-  }
-
-  double calculateScrollOffset(int index) {
-    double offset = 0;
-    for (int i = 0; i < index; i++) {
-      offset += getCategoryHeight(i);
-    }
-    return offset;
-  }
-
-  double getCategoryHeight(int index) {
-    const double headerHeight = 40; // Height of category header
-    const double itemPadding = 32; // Padding around items
-    double itemHeight = MediaQuery.of(context).size.height *
-        0.25; // Height of an individual item
-    int itemCount = widget.categories[index].items.length;
-
-    return headerHeight + (itemHeight * itemCount) + (itemPadding * itemCount);
   }
 }
 
@@ -482,20 +445,17 @@ class CustomDialogDays extends StatelessWidget {
   }
 }
 
-class ItemCart extends StatefulWidget {
+class ItemCart extends StatelessWidget {
+  final Item item;
+  final int quantity;
+  final ValueChanged<int> onQuantityChanged;
+
   const ItemCart({
     super.key,
     required this.item,
+    required this.quantity,
+    required this.onQuantityChanged,
   });
-
-  final Item item;
-
-  @override
-  State<ItemCart> createState() => _ItemCartState();
-}
-
-class _ItemCartState extends State<ItemCart> {
-  int quantity = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -520,14 +480,14 @@ class _ItemCartState extends State<ItemCart> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      widget.item.name,
+                      item.name,
                       style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                           color: const Color(0xFFF56949),
                           fontWeight: FontWeight.w800,
                           fontSize: 20),
                     ),
                     Text(
-                      widget.item.recipe,
+                      item.recipe,
                       style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                           color: const Color(0xFFF8F3F0),
                           fontWeight: FontWeight.w400,
@@ -535,7 +495,7 @@ class _ItemCartState extends State<ItemCart> {
                       maxLines: 2,
                     ),
                     Text(
-                      '${widget.item.cost.toInt()} هزار تومان',
+                      '${item.cost.toInt()} هزار تومان',
                       style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                           color: const Color(0xFFFEC37D),
                           fontWeight: FontWeight.w400,
@@ -547,99 +507,93 @@ class _ItemCartState extends State<ItemCart> {
             ),
           ),
           Positioned(
-              top: 4,
-              left: 17,
-              child: widget.item.image == null
-                  ? Assets.images.defaultFood.image(width: 120, height: 120)
-                  : Image.memory(
-                      widget.item.image!,
-                      width: 120,
-                      height: 120,
-                    )),
+            top: 4,
+            left: 17,
+            child: item.image == null
+                ? Assets.images.defaultFood.image(width: 120, height: 120)
+                : Image.memory(
+                    item.image!,
+                    width: 120,
+                    height: 120,
+                  ),
+          ),
           Positioned(
-              bottom: 15,
-              left: 32,
-              child: quantity == 0
-                  ? Row(
-                      children: [
-                        InkWell(
-                            child: Assets.images.comments
-                                .image(width: 34, height: 34)),
-                        const SizedBox(
-                          width: 12,
-                        ),
-                        InkWell(
-                            onTap: () {
-                              setState(() {
-                                quantity++;
-                              });
-                            },
-                            child: Assets.images.addToShoppingCart
-                                .image(width: 34, height: 34)),
-                      ],
-                    )
-                  : Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              quantity++;
-                            });
-                          },
-                          child: Container(
-                            width: 34,
-                            height: 34,
-                            decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Color(0xFFF56949)),
-                            child: const Center(
-                              child: Icon(
-                                CupertinoIcons.plus,
-                                color: Colors.white,
-                                size: 20,
-                              ),
+            bottom: 15,
+            left: 32,
+            child: quantity == 0
+                ? Row(
+                    children: [
+                      InkWell(
+                          child: Assets.images.comments
+                              .image(width: 34, height: 34)),
+                      const SizedBox(
+                        width: 12,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          onQuantityChanged(1);
+                        },
+                        child: Assets.images.addToShoppingCart
+                            .image(width: 34, height: 34),
+                      ),
+                    ],
+                  )
+                : Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          onQuantityChanged(quantity + 1);
+                        },
+                        child: Container(
+                          width: 34,
+                          height: 34,
+                          decoration: const BoxDecoration(
+                              shape: BoxShape.circle, color: Color(0xFFF56949)),
+                          child: const Center(
+                            child: Icon(
+                              CupertinoIcons.plus,
+                              color: Colors.white,
+                              size: 20,
                             ),
                           ),
                         ),
-                        const SizedBox(
-                          width: 12,
-                        ),
-                        Text(
-                          quantity.toString(),
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge!
-                              .copyWith(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 14),
-                        ),
-                        const SizedBox(
-                          width: 12,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              quantity--;
-                            });
-                          },
-                          child: Container(
-                            width: 34,
-                            height: 34,
-                            decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Color(0xFFF56949)),
-                            child: const Center(
-                              child: Icon(
-                                CupertinoIcons.minus,
-                                color: Colors.white,
-                                size: 20,
-                              ),
+                      ),
+                      const SizedBox(
+                        width: 12,
+                      ),
+                      Text(
+                        quantity.toString(),
+                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14),
+                      ),
+                      const SizedBox(
+                        width: 12,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          if (quantity > 0) {
+                            onQuantityChanged(quantity - 1);
+                          }
+                        },
+                        child: Container(
+                          width: 34,
+                          height: 34,
+                          decoration: const BoxDecoration(
+                              shape: BoxShape.circle, color: Color(0xFFF56949)),
+                          child: const Center(
+                            child: Icon(
+                              CupertinoIcons.minus,
+                              color: Colors.white,
+                              size: 20,
                             ),
                           ),
                         ),
-                      ],
-                    ))
+                      ),
+                    ],
+                  ),
+          ),
         ],
       ),
     );

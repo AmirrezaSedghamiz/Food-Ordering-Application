@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:data_base_project/DataHandler/QueryHandler.dart';
@@ -26,6 +27,47 @@ class Manager {
     required this.phoneNumber,
     this.image,
   });
+
+  static Future<void> updateManager({
+    required String username,
+    required int managerId,
+    required String phoneNumber,
+    required File? image,
+  }) async {
+    final connection = await Connection.open(
+        Endpoint(
+          host: '163.5.94.58',
+          port: 5432,
+          database: 'mashmammad',
+          username: 'postgres',
+          password: 'Erfank2004@',
+        ),
+        settings: const ConnectionSettings(
+          sslMode: SslMode.disable,
+        ));
+
+    try {
+      connection;
+      print("WOOOOOOOOOOOOOOOOY");
+      var result = await connection.execute(
+          Sql.named(
+              'CALL update_manager(@p_managerid ,@p_username, @p_phonenumber, @p_image)'),
+          parameters: {
+            'p_managerid': managerId,
+            'p_username': username,
+            'p_phonenumber': phoneNumber,
+            'p_image':
+                image == null ? null : base64Encode(await image.readAsBytes()),
+          });
+      await connection.close();
+      return;
+    } catch (e) {
+      print('Error: $e');
+    } finally {
+      await connection.close();
+    }
+    return null;
+  }
 
   static Future<Manager?> insertManager({
     required String username,

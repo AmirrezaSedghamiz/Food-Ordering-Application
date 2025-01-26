@@ -379,6 +379,9 @@ class _RestaurantItemsState extends State<RestaurantItems> {
           preferredSize: const Size.fromHeight(75),
           child: Center(
             child: GlobalAppBar(
+              manager: widget.manager,
+                    isManager: true,
+                    customer: null,
               image: widget.image,
               username: widget.manager.username,
               shouldPop: true,

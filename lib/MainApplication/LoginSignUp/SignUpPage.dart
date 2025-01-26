@@ -337,6 +337,8 @@ class _SignUpPageState extends State<SignUpPage> {
                                   onPressed: () {
                                     AnimationNavigation.navigatePush(
                                         MapBuilder(
+                                          isInProfile: false,
+                                          customer: null,
                                           startHour: const [],
                                           endHour: const [],
                                           day: const [],

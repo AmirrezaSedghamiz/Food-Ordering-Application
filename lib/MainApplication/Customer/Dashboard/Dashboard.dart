@@ -190,6 +190,7 @@ class _DashboardState extends State<Dashboard> {
           if (today - 1 == weekDay.indexOf(i.dayOfWeek)) {
             todayHours =
                 "${myDays[today - 1]} : ${convertPostgresTimeToHours(i.startHour)} - ${convertPostgresTimeToHours(i.endHour)}";
+            print(todayHours);
           }
         }
         List<Category> categories = await Category.getCategoriesByRestaurantId(
@@ -289,6 +290,9 @@ class _DashboardState extends State<Dashboard> {
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(75),
           child: GlobalAppBar(
+            manager: null,
+            isManager: false,
+            customer: widget.customer,
             image: customerImage,
             username: widget.customer.username,
             shouldPop: false,
@@ -475,7 +479,9 @@ class _DashboardState extends State<Dashboard> {
                   ),
                 ),
               ),
-              const GlobalBottomNavigator(),
+              GlobalBottomNavigator(
+                customer: widget.customer,
+              ),
             ],
           ),
         ),
@@ -485,6 +491,6 @@ class _DashboardState extends State<Dashboard> {
 
   int getTodayAsInt() {
     int weekday = DateTime.now().weekday;
-    return (weekday % 7) + 2;
+    return (weekday + 2) % 7;
   }
 }

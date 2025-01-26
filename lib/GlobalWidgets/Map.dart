@@ -4,8 +4,11 @@ import 'dart:io';
 
 import 'package:data_base_project/GlobalWidgets/AnimationNavigation.dart';
 import 'package:data_base_project/GlobalWidgets/HttpClient.dart';
+import 'package:data_base_project/MainApplication/Customer/Profile/Profile.dart';
 import 'package:data_base_project/MainApplication/LoginSignUp/SignUpPage.dart';
 import 'package:data_base_project/MainApplication/Manager/Restaurant/NewRestaurant.dart';
+import 'package:data_base_project/SourceDesign/Address.dart';
+import 'package:data_base_project/SourceDesign/Customer.dart';
 import 'package:data_base_project/SourceDesign/Manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -30,11 +33,15 @@ class MapBuilder extends StatefulWidget {
       required this.restaurantPic,
       required this.restaurantIdConfirm,
       required this.startHour,
+      required this.isInProfile,
       required this.endHour,
       required this.day,
+      required this.customer,
       required this.restaurantHours});
 
   final bool isInRestaurantPage;
+  final bool isInProfile;
+  final Customer? customer;
 
   final String? restaurantName;
   final String? restaurantDeliveryRadius;
@@ -52,7 +59,6 @@ class MapBuilder extends StatefulWidget {
   final List<String?> startHour;
   final List<String?> endHour;
   final List<String?> day;
-
 
   @override
   State<MapBuilder> createState() => _MapBuilderState();
@@ -267,6 +273,19 @@ class _MapBuilderState extends State<MapBuilder> {
                           final response = await HttpClient.reverseGeoCoding.get(
                               'reverse?lat=${selectedLocation != null ? selectedLocation!.latitude : userLocation?.latitude!}&lng=${selectedLocation != null ? selectedLocation!.longitude : userLocation?.longitude!}',
                               options: HttpClient.globalHeader);
+                          if (widget.isInProfile) {
+                            Navigator.pop(context);
+                            Customer myCustomer = widget.customer!;
+                            myCustomer.addresses.add(Address(
+                                addressId: -1,
+                                isSelected: false,
+                                address: response.data["formatted_address"],
+                                point: LatLng(userLocation!.latitude!,
+                                    userLocation!.longitude!)));
+                            AnimationNavigation.navigateReplace(
+                                Profile(customer: myCustomer), context);
+                            return;
+                          }
                           if (!(widget.isInRestaurantPage)) {
                             AnimationNavigation.navigateMakeFirst(
                                 SignUpPage(
@@ -286,11 +305,12 @@ class _MapBuilderState extends State<MapBuilder> {
                             Navigator.pop(context);
                             AnimationNavigation.navigateReplace(
                                 NewRestaurant(
-                                  startHour: widget.startHour,
-                                  endHour: widget.endHour,
-                                  day: widget.day,
-                                  restaurantIdConfirm: widget.restaurantIdConfirm,
-                                  restaurantPic: widget.restaurantPic,
+                                    startHour: widget.startHour,
+                                    endHour: widget.endHour,
+                                    day: widget.day,
+                                    restaurantIdConfirm:
+                                        widget.restaurantIdConfirm,
+                                    restaurantPic: widget.restaurantPic,
                                     phoneNumber: widget.phoneNumber,
                                     image: widget.image,
                                     location: selectedLocation ??
