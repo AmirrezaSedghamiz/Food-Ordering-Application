@@ -3,8 +3,10 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:data_base_project/DataHandler/QueryHandler.dart';
 import 'package:postgres/postgres.dart';
+
+import 'package:data_base_project/DataHandler/QueryHandler.dart';
+import 'package:data_base_project/SourceDesign/Restaurant.dart';
 
 class Manager {
   int managerid;
@@ -36,11 +38,11 @@ class Manager {
   }) async {
     final connection = await Connection.open(
         Endpoint(
-          host: '163.5.94.58',
-          port: 5432,
-          database: 'mashmammad',
-          username: 'postgres',
-          password: 'Erfank2004@',
+          host: dbHost ?? "",
+          port: int.parse(dbPort ?? "8000"),
+          database: dbDatabase ?? "",
+          username: dbUsername ?? "",
+          password: dbPassword ?? "",
         ),
         settings: const ConnectionSettings(
           sslMode: SslMode.disable,
@@ -76,11 +78,11 @@ class Manager {
   }) async {
     final connection = await Connection.open(
         Endpoint(
-          host: '163.5.94.58',
-          port: 5432,
-          database: 'mashmammad',
-          username: 'postgres',
-          password: 'Erfank2004@',
+          host: dbHost ?? "",
+          port: int.parse(dbPort ?? "8000"),
+          database: dbDatabase ?? "",
+          username: dbUsername ?? "",
+          password: dbPassword ?? "",
         ),
         settings: const ConnectionSettings(
           sslMode: SslMode.disable,
@@ -91,11 +93,11 @@ class Manager {
       print('Connected to the database.');
 
       var result = await connection.execute(
-          Sql.named('CALL insert_manager(@username, @password, @phoneNumber)'),
+          Sql.named('CALL insert_manager(@username, @password, @phonenumber)'),
           parameters: {
             'username': username,
             'password': password,
-            'phoneNumber': phoneNumber
+            'phonenumber': phoneNumber
           });
       Manager manager =
           await LoginQuery.login(username: username, password: password);
@@ -108,4 +110,25 @@ class Manager {
       print('Connection closed.');
     }
   }
+}
+
+class ManagerRestaurant {
+  Manager manager;
+  Restaurant? restaurant;
+  ManagerRestaurant({
+    required this.manager,
+    required this.restaurant,
+  });
+
+  factory ManagerRestaurant.fromMap(Map<String, dynamic> map) {
+    return ManagerRestaurant(
+      manager: Manager.fromMap(map['manager'] as Map<String, dynamic>),
+      restaurant: map['restaurant'] != null
+          ? Restaurant.fromMap(map['restaurant'] as Map<String, dynamic>)
+          : null,
+    );
+  }
+
+  factory ManagerRestaurant.fromJson(String source) =>
+      ManagerRestaurant.fromMap(json.decode(source) as Map<String, dynamic>);
 }

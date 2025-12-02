@@ -337,6 +337,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                   onPressed: () {
                                     AnimationNavigation.navigatePush(
                                         MapBuilder(
+                                          restaurantMinPurchase: null,
                                           isInProfile: false,
                                           customer: null,
                                           startHour: const [],

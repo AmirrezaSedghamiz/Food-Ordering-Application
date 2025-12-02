@@ -500,7 +500,7 @@ class _RestaurantItemsState extends State<RestaurantItems> {
                               const SizedBox(
                                 width: 12,
                               ),
-                              InkWell(
+                              GestureDetector(
                                   onTap: () {
                                     if (selectedCategoryIndex != index) {
                                       setState(() {
@@ -537,7 +537,7 @@ class _RestaurantItemsState extends State<RestaurantItems> {
                                           ? Assets.images.edit
                                           : Assets.images.abort)
                                       .image(width: 30, height: 30)),
-                              InkWell(
+                              GestureDetector(
                                 onTap: () {
                                   if (selectedCategoryIndex != index) {
                                     setState(() {
@@ -661,6 +661,7 @@ class _RestaurantItemsState extends State<RestaurantItems> {
                             }
                             setState(() {
                               allItems.add(Item(
+                                  itemid: -1,
                                   name: '',
                                   recipe: '',
                                   cost: 0,
@@ -756,7 +757,7 @@ class _RestaurantItemsState extends State<RestaurantItems> {
                               const SizedBox(
                                 width: 12,
                               ),
-                              InkWell(
+                              GestureDetector(
                                   onTap: () {
                                     if (selectedItemIndex != index) {
                                       setState(() {
@@ -831,7 +832,7 @@ class _RestaurantItemsState extends State<RestaurantItems> {
                                           ? Assets.images.edit
                                           : Assets.images.abort)
                                       .image(width: 30, height: 30)),
-                              InkWell(
+                              GestureDetector(
                                 onTap: () async {
                                   if (selectedItemIndex != index) {
                                     setState(() {
@@ -892,6 +893,7 @@ class _RestaurantItemsState extends State<RestaurantItems> {
 
                                           isBeingEdited[index] = true;
                                         } else {
+                                          print("in here");
                                           int temp = 0;
                                           for (var i in allItems) {
                                             if (i == allItems[index]) {
@@ -903,6 +905,7 @@ class _RestaurantItemsState extends State<RestaurantItems> {
                                               temp++;
                                             }
                                           }
+                                          print("in here3");
                                           itemNameController[categories.indexOf(
                                                       selectedCategory[index]!)]
                                                   [temp]
@@ -911,8 +914,11 @@ class _RestaurantItemsState extends State<RestaurantItems> {
                                               .text;
                                           categories[categories.indexOf(
                                                   selectedCategory[index]!)]
-                                              .items[temp] = allItems[index];
+                                              .items
+                                              .replaceRange(temp, temp + 1,
+                                                  [allItems[index]]);
                                           selectedItemIndex = -1;
+                                          print("in here2");
                                         }
                                       }
                                     });
@@ -926,6 +932,12 @@ class _RestaurantItemsState extends State<RestaurantItems> {
                                         selectedCategory[index] != null) {
                                       allItems[index].image =
                                           await _image[index]?.readAsBytes();
+                                      allItems[index].name =
+                                          allItemsNameController[index].text;
+                                      allItems[index].recipe =
+                                          allItemsRecipeController[index].text;
+                                      allItems[index].cost = double.parse(
+                                          allItemsCostController[index].text);
                                     }
                                   }
                                 },

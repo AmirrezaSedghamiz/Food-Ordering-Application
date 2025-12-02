@@ -1,5 +1,6 @@
 import 'package:data_base_project/DataHandler/QueryHandler.dart';
 import 'package:data_base_project/GlobalWidgets/AnimationNavigation.dart';
+import 'package:data_base_project/MainApplication/Admin/Dashboard/AdminDashboard.dart';
 import 'package:data_base_project/MainApplication/Customer/Dashboard/Dashboard.dart';
 import 'package:data_base_project/MainApplication/LoginSignUp/SignUpPage.dart';
 import 'package:data_base_project/MainApplication/Manager/Dashboard/ManagerDashboard.dart';
@@ -219,7 +220,8 @@ class _LoginPageState extends State<LoginPage> {
                                   ),
                                   context);
                             } else if (result is Admin) {
-                              //TODO
+                              AnimationNavigation.navigatePopAllReplace(
+                                  AdminDashboard(admin: result), context);
                             } else {
                               setState(() {
                                 errorText = 'اطلاعات وارد شده نادرست است';

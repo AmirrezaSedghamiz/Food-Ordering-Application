@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
+import 'package:data_base_project/DataHandler/QueryHandler.dart';
 
 import 'package:data_base_project/SourceDesign/Item.dart';
 import 'package:postgres/postgres.dart';
@@ -27,11 +28,11 @@ class Category {
       {required int restaurantId, required List<Category> categories}) async {
     final connection = await Connection.open(
         Endpoint(
-          host: '163.5.94.58',
-          port: 5432,
-          database: 'mashmammad',
-          username: 'postgres',
-          password: 'Erfank2004@',
+          host: dbHost ?? "",
+          port: int.parse(dbPort ?? "8000"),
+          database: dbDatabase ?? "",
+          username: dbUsername ?? "",
+          password: dbPassword ?? "",
         ),
         settings: const ConnectionSettings(
           sslMode: SslMode.disable,
@@ -62,11 +63,11 @@ class Category {
       required int pageSize}) async {
     final connection = await Connection.open(
         Endpoint(
-          host: '163.5.94.58',
-          port: 5432,
-          database: 'mashmammad',
-          username: 'postgres',
-          password: 'Erfank2004@',
+          host: dbHost ?? "",
+          port: int.parse(dbPort ?? "8000"),
+          database: dbDatabase ?? "",
+          username: dbUsername ?? "",
+          password: dbPassword ?? "",
         ),
         settings: const ConnectionSettings(
           sslMode: SslMode.disable,
@@ -97,7 +98,7 @@ class Category {
   factory Category.fromMap(Map<String, dynamic> map) {
     return Category(
       name: map['category_name'] as String,
-      items: ((map['items']?? []) as List<dynamic>)
+      items: ((map['items'] ?? []) as List<dynamic>)
           .map((itemMap) => Item.fromMap(itemMap as Map<String, dynamic>))
           .toList(),
     );

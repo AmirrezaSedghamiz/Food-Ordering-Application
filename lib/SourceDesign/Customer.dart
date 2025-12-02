@@ -41,11 +41,11 @@ class Customer {
   }) async {
     final connection = await Connection.open(
         Endpoint(
-          host: '163.5.94.58',
-          port: 5432,
-          database: 'mashmammad',
-          username: 'postgres',
-          password: 'Erfank2004@',
+          host: dbHost ?? "",
+          port: int.parse(dbPort ?? "8000"),
+          database: dbDatabase ?? "",
+          username: dbUsername ?? "",
+          password: dbPassword ?? "",
         ),
         settings: const ConnectionSettings(
           sslMode: SslMode.disable,
@@ -83,11 +83,11 @@ class Customer {
   }) async {
     final connection = await Connection.open(
         Endpoint(
-          host: '163.5.94.58',
-          port: 5432,
-          database: 'mashmammad',
-          username: 'postgres',
-          password: 'Erfank2004@',
+          host: dbHost ?? "",
+          port: int.parse(dbPort ?? "8000"),
+          database: dbDatabase ?? "",
+          username: dbUsername ?? "",
+          password: dbPassword ?? "",
         ),
         settings: const ConnectionSettings(
           sslMode: SslMode.disable,

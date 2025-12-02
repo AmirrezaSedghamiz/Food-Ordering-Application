@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:data_base_project/DataHandler/QueryHandler.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:postgres/postgres.dart';
 
@@ -31,11 +32,11 @@ class Address {
   }) async {
     final connection = await Connection.open(
         Endpoint(
-          host: '163.5.94.58',
-          port: 5432,
-          database: 'mashmammad',
-          username: 'postgres',
-          password: 'Erfank2004@',
+          host: dbHost ?? "",
+          port: int.parse(dbPort ?? "8000"),
+          database: dbDatabase ?? "",
+          username: dbUsername ?? "",
+          password: dbPassword ?? "",
         ),
         settings: const ConnectionSettings(
           sslMode: SslMode.disable,
@@ -64,11 +65,11 @@ class Address {
       {required String username}) async {
     final connection = await Connection.open(
         Endpoint(
-          host: '163.5.94.58',
-          port: 5432,
-          database: 'mashmammad',
-          username: 'postgres',
-          password: 'Erfank2004@',
+          host: dbHost ?? "",
+          port: int.parse(dbPort ?? "8000"),
+          database: dbDatabase ?? "",
+          username: dbUsername ?? "",
+          password: dbPassword ?? "",
         ),
         settings: const ConnectionSettings(
           sslMode: SslMode.disable,
@@ -98,7 +99,7 @@ class Address {
 
   Map<String, dynamic> toJson() {
     return {
-      "addressid" : addressId,
+      "addressid": addressId,
       "addressstring": address,
       "longtitude": point.longitude,
       "latitude": point.latitude,
@@ -112,11 +113,11 @@ class Address {
       required List<int> existingIds}) async {
     final connection = await Connection.open(
         Endpoint(
-          host: '163.5.94.58',
-          port: 5432,
-          database: 'mashmammad',
-          username: 'postgres',
-          password: 'Erfank2004@',
+          host: dbHost ?? "",
+          port: int.parse(dbPort ?? "8000"),
+          database: dbDatabase ?? "",
+          username: dbUsername ?? "",
+          password: dbPassword ?? "",
         ),
         settings: const ConnectionSettings(
           sslMode: SslMode.disable,

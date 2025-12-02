@@ -3,6 +3,13 @@ import 'package:data_base_project/SourceDesign/Admin.dart';
 import 'package:data_base_project/SourceDesign/Customer.dart';
 import 'package:data_base_project/SourceDesign/Manager.dart';
 import 'package:postgres/postgres.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+final dbHost = dotenv.env['host'];
+final dbPort = dotenv.env['port'];
+final dbDatabase  = dotenv.env['database'];
+final dbUsername  = dotenv.env['username'];
+final dbPassword  = dotenv.env['password'];
 
 class LoginQuery {
   static Future<dynamic> login({
@@ -11,11 +18,11 @@ class LoginQuery {
   }) async {
     final connection = await Connection.open(
         Endpoint(
-          host: '163.5.94.58',
-          port: 5432,
-          database: 'mashmammad',
-          username: 'postgres',
-          password: 'Erfank2004@',
+          host: dbHost ?? "",
+          port: int.parse(dbPort ?? "8000"),
+          database: dbDatabase ?? "",
+          username: dbUsername ?? "",
+          password: dbPassword ?? "",
         ),
         settings: const ConnectionSettings(
           sslMode: SslMode.disable,

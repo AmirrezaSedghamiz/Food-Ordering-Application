@@ -56,8 +56,17 @@ class $AssetsFontsGen {
 class $AssetsIconGen {
   const $AssetsIconGen();
 
+  /// File path: assets/icon/HistoryIcon.svg
+  String get historyIcon => 'assets/icon/HistoryIcon.svg';
+
+  /// File path: assets/icon/HistoryIconRed.svg
+  String get historyIconRed => 'assets/icon/HistoryIconRed.svg';
+
   /// File path: assets/icon/HomeIcon.svg
   String get homeIcon => 'assets/icon/HomeIcon.svg';
+
+  /// File path: assets/icon/HomeIconRed.svg
+  String get homeIconRed => 'assets/icon/HomeIconRed.svg';
 
   /// File path: assets/icon/MapPinIcon.svg
   String get mapPinIcon => 'assets/icon/MapPinIcon.svg';
@@ -65,19 +74,43 @@ class $AssetsIconGen {
   /// File path: assets/icon/ProfileIcon.svg
   String get profileIcon => 'assets/icon/ProfileIcon.svg';
 
+  /// File path: assets/icon/ProfileIconRed.svg
+  String get profileIconRed => 'assets/icon/ProfileIconRed.svg';
+
   /// File path: assets/icon/ShoppingCartIcon.svg
   String get shoppingCartIcon => 'assets/icon/ShoppingCartIcon.svg';
+
+  /// File path: assets/icon/ShoppingCartIconRed.svg
+  String get shoppingCartIconRed => 'assets/icon/ShoppingCartIconRed.svg';
 
   /// File path: assets/icon/defaultProfile.svg
   String get defaultProfile => 'assets/icon/defaultProfile.svg';
 
   /// List of all assets
-  List<String> get values =>
-      [homeIcon, mapPinIcon, profileIcon, shoppingCartIcon, defaultProfile];
+  List<String> get values => [
+        historyIcon,
+        historyIconRed,
+        homeIcon,
+        homeIconRed,
+        mapPinIcon,
+        profileIcon,
+        profileIconRed,
+        shoppingCartIcon,
+        shoppingCartIconRed,
+        defaultProfile
+      ];
 }
 
 class $AssetsImagesGen {
   const $AssetsImagesGen();
+
+  /// File path: assets/images/CustomerService.png
+  AssetGenImage get customerService =>
+      const AssetGenImage('assets/images/CustomerService.png');
+
+  /// File path: assets/images/FeedBackService.png
+  AssetGenImage get feedBackService =>
+      const AssetGenImage('assets/images/FeedBackService.png');
 
   /// File path: assets/images/LoginPageTop.png
   AssetGenImage get loginPageTop =>
@@ -98,6 +131,14 @@ class $AssetsImagesGen {
   /// File path: assets/images/ManagerRestaurant.png
   AssetGenImage get managerRestaurant =>
       const AssetGenImage('assets/images/ManagerRestaurant.png');
+
+  /// File path: assets/images/ManagerService.png
+  AssetGenImage get managerService =>
+      const AssetGenImage('assets/images/ManagerService.png');
+
+  /// File path: assets/images/RestaurantService.png
+  AssetGenImage get restaurantService =>
+      const AssetGenImage('assets/images/RestaurantService.png');
 
   /// File path: assets/images/SignUpImage.png
   AssetGenImage get signUpImage =>
@@ -153,11 +194,15 @@ class $AssetsImagesGen {
 
   /// List of all assets
   List<AssetGenImage> get values => [
+        customerService,
+        feedBackService,
         loginPageTop,
         managerHistory,
         managerMenu,
         managerOrders,
         managerRestaurant,
+        managerService,
+        restaurantService,
         signUpImage,
         signUpPageTop,
         abort,

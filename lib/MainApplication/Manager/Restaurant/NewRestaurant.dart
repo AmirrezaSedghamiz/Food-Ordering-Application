@@ -26,6 +26,7 @@ class NewRestaurant extends StatefulWidget {
   String? name;
   String? address;
   String? maxDistance;
+  String? minPurchase;
   String? phoneNumber;
   String? deliveryFee;
   List<TextEditingController>? timeControllers;
@@ -39,6 +40,7 @@ class NewRestaurant extends StatefulWidget {
   NewRestaurant({
     Key? key,
     required this.image,
+    required this.minPurchase,
     required this.startHour,
     required this.endHour,
     required this.day,
@@ -63,6 +65,8 @@ class _NewRestaurantState extends State<NewRestaurant> {
   final TextEditingController phoneNumberController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
   final TextEditingController maxDistanceController = TextEditingController();
+  final TextEditingController minimumPurchaseController =
+      TextEditingController();
   final TextEditingController deliveryFeeController = TextEditingController();
   List<TextEditingController> timeControllers = [];
   List<String?> startHour = [];
@@ -74,6 +78,7 @@ class _NewRestaurantState extends State<NewRestaurant> {
   String? errorTextMaxDistance;
   String? errorTextPhoneNumber;
   String? errorTextDeliveryFee;
+  String? errorTextMinimumPurchase;
 
   List<String> hours = [
     '6 صبح',
@@ -122,6 +127,7 @@ class _NewRestaurantState extends State<NewRestaurant> {
     startHour = widget.startHour;
     endHour = widget.endHour;
     day = widget.day;
+    minimumPurchaseController.text = widget.minPurchase ?? '';
     phoneNumberController.text = widget.phoneNumber ?? '';
     nameController.text = widget.name ?? "";
     addressController.text = widget.address ?? "";
@@ -509,6 +515,7 @@ class _NewRestaurantState extends State<NewRestaurant> {
                             onPressed: () {
                               AnimationNavigation.navigatePush(
                                   MapBuilder(
+                                    restaurantMinPurchase: minimumPurchaseController.text,
                                     isInProfile: false,
                                     customer: null,
                                     startHour: startHour,
@@ -910,7 +917,7 @@ class _NewRestaurantState extends State<NewRestaurant> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  InkWell(
+                                  GestureDetector(
                                       onTap: () {
                                         setState(() {
                                           timeControllers.removeAt(index);
@@ -924,7 +931,7 @@ class _NewRestaurantState extends State<NewRestaurant> {
                                   const SizedBox(
                                     width: 15,
                                   ),
-                                  InkWell(
+                                  GestureDetector(
                                     onTap: () {
                                       if (startHour[index] != null &&
                                           endHour[index] != null &&
@@ -1023,16 +1030,6 @@ class _NewRestaurantState extends State<NewRestaurant> {
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.02,
                   ),
-                  Text(
-                    'هزینه پیک',
-                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                        color: const Color(0xFFFEC37D),
-                        fontWeight: FontWeight.w400,
-                        fontSize: 15),
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.02,
-                  ),
                   SizedBox(
                     height: errorTextDeliveryFee == null
                         ? MediaQuery.of(context).size.height * 50 / 900
@@ -1060,6 +1057,67 @@ class _NewRestaurantState extends State<NewRestaurant> {
                         ),
                         label: Text(
                           'هزینه ارسال',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium!
+                              .copyWith(color: Colors.grey),
+                        ),
+                        counter: null,
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(4),
+                            borderSide: const BorderSide(
+                                color: Color(0xFFEDEDED), width: 1)),
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(4),
+                            borderSide: const BorderSide(
+                                color: Color(0xFFEDEDED), width: 1)),
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(4),
+                            borderSide: const BorderSide(
+                                color: Color(0xFFEDEDED), width: 1)),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.02,
+                  ),
+                  Text(
+                    'حداقل خرید',
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                        color: const Color(0xFFFEC37D),
+                        fontWeight: FontWeight.w400,
+                        fontSize: 15),
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.02,
+                  ),
+                  SizedBox(
+                    height: errorTextMinimumPurchase == null
+                        ? MediaQuery.of(context).size.height * 50 / 900
+                        : MediaQuery.of(context).size.height * 72 / 900,
+                    child: TextField(
+                      controller: minimumPurchaseController,
+                      obscureText: false,
+                      textAlign: TextAlign.start,
+                      keyboardType: const TextInputType.numberWithOptions(),
+                      style: const TextStyle(
+                          fontSize: 13,
+                          fontFamily: "DanaFaNum",
+                          fontWeight: FontWeight.w900,
+                          color: Colors.white),
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: const Color(0xff484848),
+                        errorText: errorTextMinimumPurchase,
+                        suffixText: 'تومان',
+                        suffixStyle: const TextStyle(
+                          fontSize: 13,
+                          fontFamily: "DanaFaNum",
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                        label: Text(
+                          'حداقل خرید',
                           style: Theme.of(context)
                               .textTheme
                               .bodyMedium!
@@ -1131,6 +1189,13 @@ class _NewRestaurantState extends State<NewRestaurant> {
                                           'هزینه پیک را بنویسید';
                                     });
                                   }
+                                  if (minimumPurchaseController.text.isEmpty) {
+                                    flag = true;
+                                    setState(() {
+                                      errorTextMinimumPurchase =
+                                          'حداقل میزان خرید را مشخص کنید';
+                                    });
+                                  }
                                   if (flag) {
                                     return;
                                   }
@@ -1141,6 +1206,8 @@ class _NewRestaurantState extends State<NewRestaurant> {
                                   try {
                                     Restaurant? restaurant =
                                         await Restaurant.insertRestaurant(
+                                            minimumPurchase: double.parse(
+                                                minimumPurchaseController.text),
                                             name: nameController.text,
                                             address: addressController.text,
                                             phoneNumber:

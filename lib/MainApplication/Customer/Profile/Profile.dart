@@ -487,6 +487,11 @@ class _ProfileState extends State<Profile> {
                             setState(() {
                               addressControllers.add(TextEditingController());
                               addressLocations.add(const LatLng(0, 0));
+                              customer.addresses.add(Address(
+                                  addressId: -1,
+                                  isSelected: false,
+                                  address: "",
+                                  point: const LatLng(0, 0)));
                             });
                           },
                           icon: const Icon(
@@ -537,10 +542,25 @@ class _ProfileState extends State<Profile> {
                                         ? null
                                         : IconButton(
                                             onPressed: () {
+                                              Customer myCus = Customer(
+                                                  customerId:
+                                                      customer.customerId,
+                                                  username: customer.username,
+                                                  phoneNumber:
+                                                      customer.phoneNumber);
+                                              myCus.selectedAddress =
+                                                  customer.selectedAddress;
+                                              for (var i
+                                                  in customer.addresses) {
+                                                if (i.address.isNotEmpty) {
+                                                  myCus.addresses.add(i);
+                                                }
+                                              }
                                               AnimationNavigation.navigatePush(
                                                   MapBuilder(
+                                                    restaurantMinPurchase: null,
                                                     isInProfile: true,
-                                                    customer: this.customer,
+                                                    customer: myCus,
                                                     startHour: const [],
                                                     endHour: const [],
                                                     day: const [],
@@ -572,13 +592,10 @@ class _ProfileState extends State<Profile> {
                                             .text
                                             .isEmpty
                                         ? null
-                                        : this
-                                                .customer
-                                                .addresses[index]
-                                                .isSelected
+                                        : customer.addresses[index].isSelected
                                             ? Assets.images.greenDot
                                                 .image(width: 16, height: 16)
-                                            : InkWell(
+                                            : GestureDetector(
                                                 onTap: () {
                                                   for (var i
                                                       in customer.addresses) {
@@ -679,8 +696,6 @@ class _ProfileState extends State<Profile> {
                                         inp.add(i.addressId);
                                       }
                                     }
-                                    print(customer.customerId);
-                                    print(inp.toString());
                                     final data1 = await Address.updateAddresses(
                                         customerId: customer.customerId,
                                         addresses: customer.addresses,
@@ -724,7 +739,13 @@ class _ProfileState extends State<Profile> {
                 ],
               ),
             ),
-            GlobalBottomNavigator(customer: this.customer),
+            GlobalBottomNavigator(
+              customer: this.customer,
+              isInHome: false,
+              isInHistory: false,
+              isInProfile: true,
+              isInShoppinCart: false,
+            ),
           ],
         ),
       ),

@@ -2,6 +2,7 @@
 // ignore_for_file: constant_identifier_names
 
 import 'dart:convert';
+import 'package:data_base_project/DataHandler/QueryHandler.dart';
 
 import 'package:postgres/postgres.dart';
 
@@ -28,7 +29,7 @@ class DayHour {
     return DayHour(
       startHour: map['starthour'],
       endHour: map['endhour'],
-      dayOfWeek: weekDay[map['dayofweek']-1],
+      dayOfWeek: weekDay[map['dayofweek'] - 1],
     );
   }
 
@@ -38,11 +39,11 @@ class DayHour {
   static Future<List<DayHour>?> getDayHours({required int restaurantId}) async {
     final connection = await Connection.open(
         Endpoint(
-          host: '163.5.94.58',
-          port: 5432,
-          database: 'mashmammad',
-          username: 'postgres',
-          password: 'Erfank2004@',
+          host: dbHost ?? "",
+          port: int.parse(dbPort ?? "8000"),
+          database: dbDatabase ?? "",
+          username: dbUsername ?? "",
+          password: dbPassword ?? "",
         ),
         settings: const ConnectionSettings(
           sslMode: SslMode.disable,
@@ -78,11 +79,11 @@ class DayHour {
   }) async {
     final connection = await Connection.open(
         Endpoint(
-          host: '163.5.94.58',
-          port: 5432,
-          database: 'mashmammad',
-          username: 'postgres',
-          password: 'Erfank2004@',
+          host: dbHost ?? "",
+          port: int.parse(dbPort ?? "8000"),
+          database: dbDatabase ?? "",
+          username: dbUsername ?? "",
+          password: dbPassword ?? "",
         ),
         settings: const ConnectionSettings(
           sslMode: SslMode.disable,
@@ -109,11 +110,11 @@ class DayHour {
   static Future<void> deleteDayHours({required int restaurantId}) async {
     final connection = await Connection.open(
         Endpoint(
-          host: '163.5.94.58',
-          port: 5432,
-          database: 'mashmammad',
-          username: 'postgres',
-          password: 'Erfank2004@',
+          host: dbHost ?? "",
+          port: int.parse(dbPort ?? "8000"),
+          database: dbDatabase ?? "",
+          username: dbUsername ?? "",
+          password: dbPassword ?? "",
         ),
         settings: const ConnectionSettings(
           sslMode: SslMode.disable,

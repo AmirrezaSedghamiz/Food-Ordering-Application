@@ -3,7 +3,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
-
+import 'package:data_base_project/DataHandler/QueryHandler.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:postgres/postgres.dart';
@@ -14,6 +14,7 @@ class Restaurant {
   String address;
   String phoneNumber;
   LatLng point;
+  double minimumPurchase;
   int deliveryRadius;
   double deliveryFee;
   Uint8List image;
@@ -21,6 +22,7 @@ class Restaurant {
 
   Restaurant({
     required this.restaurantId,
+    required this.minimumPurchase,
     required this.name,
     required this.phoneNumber,
     required this.address,
@@ -40,14 +42,15 @@ class Restaurant {
     required double deliveryFee,
     required File image,
     required int managerId,
+    required double minimumPurchase,
   }) async {
     final connection = await Connection.open(
         Endpoint(
-          host: '163.5.94.58',
-          port: 5432,
-          database: 'mashmammad',
-          username: 'postgres',
-          password: 'Erfank2004@',
+          host: dbHost ?? "",
+          port: int.parse(dbPort ?? "8000"),
+          database: dbDatabase ?? "",
+          username: dbUsername ?? "",
+          password: dbPassword ?? "",
         ),
         settings: const ConnectionSettings(
           sslMode: SslMode.disable,
@@ -57,11 +60,12 @@ class Restaurant {
       connection;
       var result = await connection.execute(
           Sql.named(
-              'CALL insert_restaurant(@name, @addressstring, @longtitude, @latitude , @phonenumber , @deliveryradius , @image ,@managerid_param, @deliveryfee)'),
+              'CALL insert_restaurant(@name, @addressstring, @longtitude, @latitude , @phonenumber , @deliveryradius , @image ,@managerid_param, @deliveryfee,@minimumpurchase)'),
           parameters: {
             'name': name,
             'addressstring': address,
             'longtitude': point.longitude,
+            'minimumpurchase': minimumPurchase,
             'latitude': point.latitude,
             'phonenumber': phoneNumber,
             'deliveryradius': deliveryRadius,
@@ -83,11 +87,11 @@ class Restaurant {
       {required int managerId}) async {
     final connection = await Connection.open(
         Endpoint(
-          host: '163.5.94.58',
-          port: 5432,
-          database: 'mashmammad',
-          username: 'postgres',
-          password: 'Erfank2004@',
+          host: dbHost ?? "",
+          port: int.parse(dbPort ?? "8000"),
+          database: dbDatabase ?? "",
+          username: dbUsername ?? "",
+          password: dbPassword ?? "",
         ),
         settings: const ConnectionSettings(
           sslMode: SslMode.disable,
@@ -115,11 +119,11 @@ class Restaurant {
       {required String name, required int pageNumber}) async {
     final connection = await Connection.open(
         Endpoint(
-          host: '163.5.94.58',
-          port: 5432,
-          database: 'mashmammad',
-          username: 'postgres',
-          password: 'Erfank2004@',
+          host: dbHost ?? "",
+          port: int.parse(dbPort ?? "8000"),
+          database: dbDatabase ?? "",
+          username: dbUsername ?? "",
+          password: dbPassword ?? "",
         ),
         settings: const ConnectionSettings(
           sslMode: SslMode.disable,
@@ -153,11 +157,11 @@ class Restaurant {
       {required LatLng location, required int pageNumber}) async {
     final connection = await Connection.open(
         Endpoint(
-          host: '163.5.94.58',
-          port: 5432,
-          database: 'mashmammad',
-          username: 'postgres',
-          password: 'Erfank2004@',
+          host: dbHost ?? "",
+          port: int.parse(dbPort ?? "8000"),
+          database: dbDatabase ?? "",
+          username: dbUsername ?? "",
+          password: dbPassword ?? "",
         ),
         settings: const ConnectionSettings(
           sslMode: SslMode.disable,
@@ -200,6 +204,7 @@ class Restaurant {
         deliveryRadius: map['deliveryradius'] as int,
         image: base64Decode(map['image']),
         managerId: map['managerid'],
+        minimumPurchase: double.parse(map['minimumpurchase'].toString()),
         deliveryFee: double.parse(map['deliveryfee'].toString()));
   }
 

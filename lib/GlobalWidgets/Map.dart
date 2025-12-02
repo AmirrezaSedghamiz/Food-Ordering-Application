@@ -21,6 +21,7 @@ class MapBuilder extends StatefulWidget {
   const MapBuilder(
       {super.key,
       required this.username,
+      required this.restaurantMinPurchase,
       required this.password,
       required this.confirmPassword,
       required this.phoneNumber,
@@ -46,6 +47,7 @@ class MapBuilder extends StatefulWidget {
   final String? restaurantName;
   final String? restaurantDeliveryRadius;
   final String? restaurantDeliveryFee;
+  final String? restaurantMinPurchase;
   final List<TextEditingController>? restaurantHours;
 
   final File? restaurantPic;
@@ -172,6 +174,7 @@ class _MapBuilderState extends State<MapBuilder> {
                     child: SizedBox(
                       width: MediaQuery.of(context).size.width * 0.7,
                       child: Column(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
                           // Search Bar Container
                           if (isSearchExpanded)
@@ -305,6 +308,7 @@ class _MapBuilderState extends State<MapBuilder> {
                             Navigator.pop(context);
                             AnimationNavigation.navigateReplace(
                                 NewRestaurant(
+                                  minPurchase: widget.restaurantMinPurchase,
                                     startHour: widget.startHour,
                                     endHour: widget.endHour,
                                     day: widget.day,

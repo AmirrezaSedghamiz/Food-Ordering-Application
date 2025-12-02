@@ -12,7 +12,9 @@ import 'package:data_base_project/SourceDesign/DayHour.dart';
 import 'package:data_base_project/SourceDesign/Restaurant.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:location/location.dart';
 
 class Dashboard extends StatefulWidget {
   Dashboard({super.key, required this.customer});
@@ -23,6 +25,7 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+  bool isLoading = false;
   final TextEditingController _searchController = TextEditingController();
 
   File? customerImage;
@@ -109,8 +112,15 @@ class _DashboardState extends State<Dashboard> {
     setState(() {
       isLoadingMore = true;
     });
+    LatLng myLoc = widget.customer.selectedAddress!.point;
+    for (var i in widget.customer.addresses) {
+      if (i.isSelected) {
+        myLoc = i.point;
+        break;
+      }
+    }
     List<Restaurant>? fetchedRestaurants = await Restaurant.getNeaRestaurant(
-        location: widget.customer.selectedAddress!.point,
+        location: myLoc,
         pageNumber: currentPage);
 
     if (fetchedRestaurants != null && fetchedRestaurants.isNotEmpty) {
@@ -165,120 +175,130 @@ class _DashboardState extends State<Dashboard> {
     return '$hour $suffix';
   }
 
-  GestureDetector restaurantWidgetBuilder(Restaurant restaurant) {
-    return GestureDetector(
-      onTap: () async {
-        List<DayHour> dayHours =
-            await DayHour.getDayHours(restaurantId: restaurant.restaurantId) ??
-                [];
-        dayHours.sort((a, b) => a.dayOfWeek.index.compareTo(b.dayOfWeek.index));
-        int today = getTodayAsInt();
-        List<WeekDay> weekDay = [
-          WeekDay.SUNDAY,
-          WeekDay.SATURADY,
-          WeekDay.MONDAY,
-          WeekDay.TUESDAY,
-          WeekDay.WEDNSDAY,
-          WeekDay.THURSDAY,
-          WeekDay.FRIDAY
-        ];
-        List<String> allDays = [];
-        String todayHours = 'امروز سرویس دهی نداریم';
-        for (var i in dayHours) {
-          allDays.add(
-              "${myDays[weekDay.indexOf(i.dayOfWeek)]} : ${convertPostgresTimeToHours(i.startHour)} - ${convertPostgresTimeToHours(i.endHour)}");
-          if (today - 1 == weekDay.indexOf(i.dayOfWeek)) {
-            todayHours =
-                "${myDays[today - 1]} : ${convertPostgresTimeToHours(i.startHour)} - ${convertPostgresTimeToHours(i.endHour)}";
+  AbsorbPointer restaurantWidgetBuilder(Restaurant restaurant) {
+    return AbsorbPointer(
+      absorbing: isLoading,
+      child: GestureDetector(
+        onTap: () async {
+          setState(() {
+            isLoading = true;
+          });
+          List<DayHour> dayHours = await DayHour.getDayHours(
+                  restaurantId: restaurant.restaurantId) ??
+              [];
+          dayHours
+              .sort((a, b) => a.dayOfWeek.index.compareTo(b.dayOfWeek.index));
+          int today = getTodayAsInt();
+          List<WeekDay> weekDay = [
+            WeekDay.SUNDAY,
+            WeekDay.SATURADY,
+            WeekDay.MONDAY,
+            WeekDay.TUESDAY,
+            WeekDay.WEDNSDAY,
+            WeekDay.THURSDAY,
+            WeekDay.FRIDAY
+          ];
+          List<String> allDays = [];
+          String todayHours = 'امروز سرویس دهی نداریم';
+          for (var i in dayHours) {
+            allDays.add(
+                "${myDays[weekDay.indexOf(i.dayOfWeek)]} : ${convertPostgresTimeToHours(i.startHour)} - ${convertPostgresTimeToHours(i.endHour)}");
+            if (today - 1 == weekDay.indexOf(i.dayOfWeek)) {
+              todayHours =
+                  "${myDays[today - 1]} : ${convertPostgresTimeToHours(i.startHour)} - ${convertPostgresTimeToHours(i.endHour)}";
+            }
           }
-        }
-        List<Category> categories = await Category.getCategoriesByRestaurantId(
-                restaurantId: restaurant.restaurantId, page: 1, pageSize: 30) ??
-            [];
-        print(categories.length);
-        print(allDays.length);
-        print(dayHours.length);
-        AnimationNavigation.navigatePush(
-            RestaurantPage(
-              customer: widget.customer,
-              categories: categories,
-              restaurant: restaurant,
-              allHours: allDays,
-              dayHour: todayHours,
-            ),
-            context);
-      },
-      child: Container(
-        width: 220,
-        height: 200,
-        child: Stack(
-          children: [
-            Container(
-              width: 220,
-              height: 200,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(3),
-                image: DecorationImage(
-                  image: MemoryImage(restaurant.image),
-                  fit: BoxFit.cover,
-                ),
+          List<Category> categories =
+              await Category.getCategoriesByRestaurantId(
+                      restaurantId: restaurant.restaurantId,
+                      page: 1,
+                      pageSize: 30) ??
+                  [];
+          setState(() {
+            isLoading = false;
+          });
+          AnimationNavigation.navigatePush(
+              RestaurantPage(
+                customer: widget.customer,
+                categories: categories,
+                restaurant: restaurant,
+                allHours: allDays,
+                dayHour: todayHours,
               ),
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
+              context);
+        },
+        child: Container(
+          width: 220,
+          height: 200,
+          child: Stack(
+            children: [
+              Container(
                 width: 220,
-                height: 80,
+                height: 200,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF636363).withOpacity(0.8),
-                  borderRadius: const BorderRadius.vertical(
-                    bottom: Radius.circular(3),
+                  borderRadius: BorderRadius.circular(3),
+                  image: DecorationImage(
+                    image: MemoryImage(restaurant.image),
+                    fit: BoxFit.cover,
                   ),
                 ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      restaurant.name,
-                      style: const TextStyle(
-                        color: Color(0xFFFEC37D),
-                        fontSize: 16,
-                        fontFamily: 'DanaFaNum',
-                        fontWeight: FontWeight.w800,
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  width: 220,
+                  height: 80,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF636363).withOpacity(0.8),
+                    borderRadius: const BorderRadius.vertical(
+                      bottom: Radius.circular(3),
+                    ),
+                  ),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        restaurant.name,
+                        style: const TextStyle(
+                          color: Color(0xFFFEC37D),
+                          fontSize: 16,
+                          fontFamily: 'DanaFaNum',
+                          fontWeight: FontWeight.w800,
+                        ),
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.location_on,
-                          color: Colors.white,
-                          size: 15,
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            restaurant.address,
-                            style: const TextStyle(
-                              color: Color(0xFFF8F3F0),
-                              fontFamily: 'DanaFaNum',
-                              fontSize: 13,
-                              fontWeight: FontWeight.w400,
-                            ),
-                            overflow: TextOverflow.ellipsis,
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.location_on,
+                            color: Colors.white,
+                            size: 15,
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              restaurant.address,
+                              style: const TextStyle(
+                                color: Color(0xFFF8F3F0),
+                                fontFamily: 'DanaFaNum',
+                                fontSize: 13,
+                                fontWeight: FontWeight.w400,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -286,119 +306,186 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: const Color(0xFF201F22),
-        resizeToAvoidBottomInset: true,
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(75),
-          child: GlobalAppBar(
-            manager: null,
-            isManager: false,
-            customer: widget.customer,
-            image: customerImage,
-            username: widget.customer.username,
-            shouldPop: false,
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: SafeArea(
+        child: Scaffold(
+          backgroundColor: const Color(0xFF201F22),
+          resizeToAvoidBottomInset: true,
+          appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(75),
+            child: GlobalAppBar(
+              manager: null,
+              isManager: false,
+              customer: widget.customer,
+              image: customerImage,
+              username: widget.customer.username,
+              shouldPop: false,
+            ),
           ),
-        ),
-        body: SizedBox(
-          width: double.infinity,
-          height: MediaQuery.of(context).size.height,
-          child: Stack(
-            children: [
-              SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: Padding(
-                  padding: EdgeInsets.fromLTRB(
-                    MediaQuery.of(context).size.width * 0.05,
-                    MediaQuery.of(context).size.height * 0.03,
-                    MediaQuery.of(context).size.width * 0.05,
-                    MediaQuery.of(context).size.height * 0.18,
-                  ),
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 50 / 900,
-                        child: TextField(
-                          controller: _searchController,
-                          onChanged: (value) async {
-                            if (_debounce?.isActive ?? false)
-                              _debounce!.cancel(); // Cancel any active timer
-
-                            _debounce = Timer(
-                                const Duration(milliseconds: 1000), () async {
-                              setState(() {
-                                searchedRestaurants = [];
-                              });
-                              if (value.isEmpty) {
-                                return;
+          body: SizedBox(
+            width: double.infinity,
+            height: MediaQuery.of(context).size.height,
+            child: Stack(
+              children: [
+                SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(
+                      MediaQuery.of(context).size.width * 0.05,
+                      MediaQuery.of(context).size.height * 0.03,
+                      MediaQuery.of(context).size.width * 0.05,
+                      MediaQuery.of(context).size.height * 0.18,
+                    ),
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 50 / 900,
+                          child: TextField(
+                            controller: _searchController,
+                            onChanged: (value) async {
+                              if (_debounce?.isActive ?? false) {
+                                _debounce!.cancel(); // Cancel any active timer
                               }
-                              currentPageSearch =
-                                  1; // Reset the page to the first
-                              await getDataSearch();
-                            });
-                          },
-                          textAlign: TextAlign.start,
-                          style: const TextStyle(
-                              fontSize: 13,
-                              fontFamily: "DanaFaNum",
-                              fontWeight: FontWeight.w900,
-                              color: Colors.white),
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: const Color(0xff484848),
-                            prefixIcon: const Icon(
-                              Icons.search,
-                              color: Colors.white,
+
+                              _debounce = Timer(
+                                  const Duration(milliseconds: 1000), () async {
+                                setState(() {
+                                  searchedRestaurants = [];
+                                });
+                                if (value.isEmpty) {
+                                  return;
+                                }
+                                currentPageSearch =
+                                    1; // Reset the page to the first
+                                await getDataSearch();
+                              });
+                            },
+                            textAlign: TextAlign.start,
+                            style: const TextStyle(
+                                fontSize: 13,
+                                fontFamily: "DanaFaNum",
+                                fontWeight: FontWeight.w900,
+                                color: Colors.white),
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: const Color(0xff484848),
+                              prefixIcon: const Icon(
+                                Icons.search,
+                                color: Colors.white,
+                              ),
+                              label: Text(
+                                'دنبال چی میگردی؟',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .copyWith(color: Colors.grey),
+                              ),
+                              counter: null,
+                              errorBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: const BorderSide(
+                                      color: Color(0xFFEDEDED), width: 1)),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: const BorderSide(
+                                      color: Color(0xFFEDEDED), width: 1)),
+                              focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: const BorderSide(
+                                      color: Color(0xFFEDEDED), width: 1)),
+                              enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: const BorderSide(
+                                      color: Color(0xFFEDEDED), width: 1)),
                             ),
-                            label: Text(
-                              'دنبال چی میگردی؟',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .copyWith(color: Colors.grey),
-                            ),
-                            counter: null,
-                            errorBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: const BorderSide(
-                                    color: Color(0xFFEDEDED), width: 1)),
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: const BorderSide(
-                                    color: Color(0xFFEDEDED), width: 1)),
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: const BorderSide(
-                                    color: Color(0xFFEDEDED), width: 1)),
-                            enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: const BorderSide(
-                                    color: Color(0xFFEDEDED), width: 1)),
                           ),
                         ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      if (searchedRestaurants.isNotEmpty &&
-                          _searchController.text != '')
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        if (searchedRestaurants.isNotEmpty &&
+                            _searchController.text != '')
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.95,
+                            height: 200,
+                            child: ListView.builder(
+                              controller: _scrollControllerSearch,
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              physics: const BouncingScrollPhysics(),
+                              itemCount: isLoadingMore
+                                  ? searchedRestaurants.length + 1
+                                  : searchedRestaurants.length,
+                              itemBuilder: (context, index) {
+                                if (index == searchedRestaurants.length) {
+                                  return Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(25, 8, 25, 8),
+                                    child: Center(
+                                      child: LoadingAnimationWidget
+                                          .fourRotatingDots(
+                                        size: 20,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  );
+                                }
+                                return Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(25, 8, 0, 8),
+                                  child: restaurantWidgetBuilder(
+                                      searchedRestaurants[index]),
+                                );
+                              },
+                            ),
+                          ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'رستوران های نزدیکت',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge!
+                                  .copyWith(
+                                      color: const Color(0xFFFEC37D),
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 20),
+                            ),
+                            IconButton(
+                              onPressed: () {},
+                              icon: const Icon(
+                                CupertinoIcons.backward,
+                                color: Color(0xFFFEC37D),
+                                size: 20,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 16,
+                        ),
                         SizedBox(
                           width: MediaQuery.of(context).size.width * 0.95,
                           height: 200,
                           child: ListView.builder(
-                            controller: _scrollControllerSearch,
+                            controller:
+                                _scrollController, // Attach the scroll controller
                             shrinkWrap: true,
                             scrollDirection: Axis.horizontal,
                             physics: const BouncingScrollPhysics(),
                             itemCount: isLoadingMore
-                                ? searchedRestaurants.length + 1
-                                : searchedRestaurants.length,
+                                ? nearRestaurants.length + 1
+                                : nearRestaurants.length,
                             itemBuilder: (context, index) {
-                              if (index == searchedRestaurants.length) {
+                              if (index == nearRestaurants.length) {
                                 return Padding(
                                   padding:
-                                      const EdgeInsets.fromLTRB(25, 8, 0, 8),
+                                      const EdgeInsets.fromLTRB(25, 8, 25, 8),
                                   child: Center(
                                     child:
                                         LoadingAnimationWidget.fourRotatingDots(
@@ -411,81 +498,24 @@ class _DashboardState extends State<Dashboard> {
                               return Padding(
                                 padding: const EdgeInsets.fromLTRB(25, 8, 0, 8),
                                 child: restaurantWidgetBuilder(
-                                    searchedRestaurants[index]),
+                                    nearRestaurants[index]),
                               );
                             },
                           ),
                         ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'رستوران های نزدیکت',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyLarge!
-                                .copyWith(
-                                    color: const Color(0xFFFEC37D),
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 20),
-                          ),
-                          IconButton(
-                            onPressed: () {},
-                            icon: const Icon(
-                              CupertinoIcons.backward,
-                              color: Color(0xFFFEC37D),
-                              size: 20,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 16,
-                      ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.95,
-                        height: 200,
-                        child: ListView.builder(
-                          controller:
-                              _scrollController, // Attach the scroll controller
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                          physics: const BouncingScrollPhysics(),
-                          itemCount: isLoadingMore
-                              ? nearRestaurants.length + 1
-                              : nearRestaurants.length,
-                          itemBuilder: (context, index) {
-                            if (index == nearRestaurants.length) {
-                              return Padding(
-                                padding: const EdgeInsets.fromLTRB(25, 8, 0, 8),
-                                child: Center(
-                                  child:
-                                      LoadingAnimationWidget.fourRotatingDots(
-                                    size: 20,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              );
-                            }
-                            return Padding(
-                              padding: const EdgeInsets.fromLTRB(25, 8, 0, 8),
-                              child: restaurantWidgetBuilder(
-                                  nearRestaurants[index]),
-                            );
-                          },
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              GlobalBottomNavigator(
-                customer: widget.customer,
-              ),
-            ],
+                GlobalBottomNavigator(
+                  customer: widget.customer,
+                  isInHome: true,
+                  isInHistory: false,
+                  isInProfile: false,
+                  isInShoppinCart: false,
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -495,5 +525,29 @@ class _DashboardState extends State<Dashboard> {
   int getTodayAsInt() {
     int weekday = DateTime.now().weekday;
     return (weekday + 2) % 7;
+  }
+
+  double _exitPromptOpacity = 0.0;
+  DateTime? _lastPressedTime;
+
+  Future<bool> _onWillPop() async {
+    final currentTime = DateTime.now();
+    if (_lastPressedTime == null ||
+        currentTime.difference(_lastPressedTime!) >
+            const Duration(seconds: 2)) {
+      _lastPressedTime = currentTime;
+      setState(() {
+        _exitPromptOpacity = 1.0;
+      });
+
+      // Hide the prompt after 2 seconds with animation
+      Future.delayed(const Duration(milliseconds: 2000), () {
+        // Completely remove the prompt after the fade-out animation
+        Future.delayed(const Duration(milliseconds: 300), () {});
+      });
+
+      return Future.value(false);
+    }
+    return Future.value(true);
   }
 }
